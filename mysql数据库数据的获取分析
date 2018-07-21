@@ -1,0 +1,14 @@
+1.连接MySQL数据库中表的数据，对其进行简单分析，如下：
+
+    import numpy as np
+    import pymysql as sql
+    
+    # getConnection函数：连接数据库
+    def getConnection():
+      return sql.connect(host = '',user = '' ,password = '' db = '',charset = 'utf8' )
+    
+    #加载数据库中数据
+    conn = getConnection()
+    cur = conn.cursor()
+    cn = cur.execute('select * from table')
+    
