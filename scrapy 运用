@@ -1,0 +1,44 @@
+1.在使用使用scrapy框架将数据导入MySQL数据库有如下操作
+    （1）在spiders下面写好的 spdier.py以后，创建一个 Item对象如：
+          from KgcSpider.ItemKgc import *
+          item = KgcItem()
+    （2）通过 xpath和css选择器抓取到页面以后，进行如下操作：
+          item['A'] = A
+          item['B'] = B
+          yield item    
+         (yield:在scrapy中将每次结果保存起来，后面存一次，它就运行一次)
+    （3）在pipleline 管道中开启数据库连接，如下：
+          import pymysql    #导入pymsql中间件
+              (open_spider函数只负责开启数据库连接)
+              def open_spider(self,spider):
+                  self.db = pymsql.connect(host = 'localhost',user='root',password='***',db = '数据库名',charset='utf8')
+
+              (close_spider函数只负责关闭数据库连接）
+              def close_spider(self,spider):
+                  self.db.close()
+
+              def lianjie(self,item,spider):
+                  item['A'] = V1
+                  item['B'] = V2
+                  sql = "insert into td_job(list_A,list_B) VALUES ('{0}','{1}').format(V1,V2)"
+                  cursor = self.db.cursor()
+                  cusor.execute(sql)
+                  self.db.commit()
+                  return item
+            注意：self.db     lianjie(slef,item,spider) 
+            
+      (4) 数据库连接步骤
+            1.db = pymysql.connect(host,user,password,db,charset)    #  创建连接   connect() 5个参数 
+            2.sql = 'insert into table(list1,list2,list3) VALUES ('','','')  # 写sql语句    list1:表示列名   
+            3.cursor = db.cursor()  #创建一个游标
+            4.cursor.execute(sql)   #使用游标插入sql语句
+            5.db.commit()           #commit提交数据到数据库中
+            6.db.close()            #关闭数据库连接
+
+      （5）在setting设置中开启数据库管道连接
+            在scrapy中管道数据约小，优先级约高，数据库默认管道号是 300
+            
+      （6）在item中定义需要下载的对象
+          class ItemKgc(scrapy.Item):
+              A = scrapy.Field()
+              B = scrapy.Field()
