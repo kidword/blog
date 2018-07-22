@@ -11,4 +11,11 @@
     conn = getConnection()
     cur = conn.cursor()
     cn = cur.execute('select * from table')
+    rows = cur.fetchall()   (fetchall将数据转换成元组类型) type(rows)  tuple类型
+    rows = list(rows)
+    conn.commit()
+    conn.close()
+    conn.close()
+    
+    #对数据进行词频统计操作
     
