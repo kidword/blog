@@ -1,0 +1,41 @@
+import pandas as pd
+import csv
+import codecs
+import pymysql
+req = pd.read_csv(r'F:\sp\job.csv')
+
+def get_con():
+    conn = pymysql.connect(host = 'localhost', port=3306, user='root', passwd='123', db='python2', charset='utf8')
+    return conn
+def insert(cur, sql, args):
+    cur.execute(sql, args)
+
+def read_csv_to_mysql(filename):
+    with codecs.open(filename=filename, mode='r', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        head = next(reader)
+        conn = get_con()
+        #sql = 'insert into text values(%s,%s,%s,%s,%s,%s)'
+        list_1 = []
+        for item in reader:
+            #print(item)
+            # if item[1] is None or item[1] == '':  # item[1]作为唯一键，不能为null
+            #     continue
+            args = list(item)
+            list_1.append(args)
+
+            # sql = "insert into text(gsmc,gzdd,keywords,zwmc,zwyq,zwyx) VALUES ('{0}','{1}','{2}','{3}','{4}','{5}')".format(args[0],args[1],args[2],args[3],args[4],args[5])
+            # cur = conn.cursor
+            # cur.execute(sql)
+            # #insert(cur, sql=sql, args=args)
+        list_2 = []
+        for i in list_1:
+            if len(i)>0:
+                list_2.append(i)
+        # sql = "insert into text(gsmc,gzdd,keywords) VALUES ("+str(list[0])+","+str(list[1])+","+""+list[2]+")"
+        # cur = conn.cursor
+        # cur.execute(sql)
+        print(list_2)
+        conn.commit()
+        #cur.close()
+        conn.close()
