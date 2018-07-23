@@ -1,0 +1,18 @@
+import codecs
+import csv
+import pandas as pd
+import pymysql
+csv_reader = csv.reader(open('D:\CH.csv', encoding='gb18030'))
+n = 0
+for row in csv_reader:
+    n+=1
+    rows = row[1:]
+    #print(rows[0],rows[1],rows[2],rows[3],rows[4])
+    connent = pymysql.connect(host='localhost', user='root', passwd='hh226752', db='flightradar24', charset='utf8')
+    cursor = connent.cursor()
+    #sql = "insert into csv_mysql(name,j_name,daima,jindu,weidu) values('" + str(rows[0]) + "','" + str(rows[1]) + "'," + "'" + str(rows[2]) + "'" + ",'" + str(rows[3]) + "','" + str(rows[4]) + "')"
+    sql = "insert into csv_mysql(name,j_name,daima,jindu,weidu) VALUES (%s,%s,%s,%s,%s)"
+    params = (rows[0],rows[1],rows[2],rows[3],rows[4])
+    cursor.execute(sql,params)
+    print('插入成功次数：', n)
+    connent.commit()
