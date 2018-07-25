@@ -1,55 +1,9 @@
-import requests
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-import time
-import re
-# browser=webdriver.Chrome()
-# browser.get("https://www.flightradar24.com/data/airports/china")
-# flight_url = browser.find_elements_by_css_selector('#tbl-datatable > tbody > tr> td> a')
-
-lis_name=['AKU', 'AAT', 'AQG', 'AOG', 'AVA', 'YIE', 'AEB', 'NBS', 'BSD', 'BAV', 'RLK', 'BHY', 'NAY', 'PEK', 'BFJ', 'BPL', 'KJI', 'CGQ', 'CGD', 'CSX', 'CIH', 'CZX', 'CHG', 'CDE', 'CTU', 'CIF', 'JUH', 'CKG', 'DLU', 'DLC', 'DDG', 'DCY', 'DQA', 'DAT', 'DYG', 'DAX', 'HXD', 'DSN', 'DOY', 'DNH', 'ENH', 'ERL', 'FUO', 'FUG', 'FYJ', 'FOC', 'KOW', 'GMQ', 'GYS', 'CAN', 'KWL', 'KWE', 'GYU', 'HAK', 'HLD', 'HMI', 'HDG', 'HGH', 'HZG', 'HRB', 'HFE', 'HEK', 'HNY', 'HET', 'HTN', 'HIA', 'HJJ', 'TXN', 'HYN', 'HUZ', 'JGS', 'JGD', 'JMU', 'JGN', 'SWA', 'TNA', 'JIC', 'JDZ', 'JHG', 'JNG', 'JJN', 'JNZ', 'JIU', 'JXA', 'KJH', 'KGT', 'KRY', 'KHG', 'KRL', 'KMG', 'KCA', 'LHW', 'LXA', 'LYG', 'LLB', 'LJG', 'LNJ', 'LFQ', 'LYI', 'HZH', 'LPF', 'LZH', 'LNL', 'LCX', 'LYA', 'LZO', 'LLV', 'LUM', 'NZH', 'MXZ', 'MIG', 'OHE', 'MDG', 'KHN', 'NAO', 'NKG', 'NNG', 'NTG', 'NNY', 'NGB', 'LZY', 'PZI', 'SYM', 'BPX', 'JIQ', 'TAO', 'IQN', 'SHP', 'BPE', 'BAR', 'NDG', 'JUZ', 'RIZ', 'SQJ', 'SYX', 'PVG', 'SHA', 'SQD', 'DIG', 'WGN', 'HPG', 'SHE', 'SZX', 'RKZ', 'SHF', 'SJW', 'WDS', 'JZH', 'TCG', 'TYN', 'TVS', 'TCZ', 'TSN', 'THQ', 'TNH', 'TGO', 'TEN', 'TLQ', 'HLH', 'UCB', 'URC', 'WXN', 'WEF', 'WEH', 'WNH', 'WNZ', 'WUA', 'WUH', 'WUX', 'WUS', 'WUZ', 'XIY', 'GXH', 'XMN', 'XFN', 'XIC', 'XIL', 'ACX', 'XNN', 'NLT', 'WUT', 'XUZ', 'ENY', 'YNZ', 'YTY', 'YNJ', 'YNT', 'YBP', 'YIH', 'LDS', 'YIC', 'INC', 'YKH', 'YIN', 'YIW', 'LLF', 'UYN', 'YCU', 'YUS', 'ZQZ', 'YZY', 'ZHA', 'ZAT', 'CGO', 'ZHY', 'HSN', 'ZUH', 'WMT', 'ZYI']
-
-# lis_name存中国所有机场代码
-# lis_name = []
-# for i in flight_url:
-#     l_name = i.get_attribute('data-iata')
-#     lis_name.append(l_name)
-#
-# while None in lis_name:
-#     lis_name.remove(None)
-# print(lis_name)
-#得到所有url链接
-n = 0
-ch = 0
-for i in lis_name:
-    try:
-        url = 'https://www.flightradar24.com/data/airports/{}/routes'
-        new_url = url.format(i)
-        headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.81 Safari/537.36'}
-        response = requests.get(url=new_url, headers=headers,verify=False)
-        html = response.text
-
-        L = re.search('arrRoutes=\[(.*?)\]', html, re.S).group(1)
-        if i == 'KJI' and 'HXD':
-            S = eval(L)
-        else:
-            S = eval(L)
-            dic = list(S)
-        n += 1
-        for j in dic:
-            # 获取机场代码
-            flg_code = j['iata']
-            # 获取机场名称
-            #flg_name = j['name']
-            # 获取机场经度
-            #flg_jingdu = j['lat']
-            # 获取机场纬度
-            #flg_weidu = j['lon']
-
-            #当 flg_code = KJI 时 i 的属性为dict了
-            print('打印次数：',n,'起飞机场代码：',i,'到达机场代码：',flg_code)
-        ch+=1
-    except AttributeError:
-        print('起飞机场代码：',i,'------------{}此机场最近没有航信信息-----------'.format(i))
-    except TypeError:
-        print('起飞机场代码：',i,'-------------{}类型错误，----------'.format(i))
+1. 数据遗漏，数据量比本来数据量多一点？
+2. 爬取的时候，出现错误的地方通过写日志的方式记录错误？
+3. 列表中的值，怎么传递？
+4. 重新爬取下来的数据怎么写sql语句，如果没有就新增，有的舍弃？
+5. 两层网页内容的网页比较简单，如果是三层、四层、五层的网页怎么获得相应数据？
+6. 如何写一个规范的网络爬虫，能重复使用，或者放在服务器上稳定运行的？
+7. selenium如果网页刷不出来的话，会跳转到下一个网页，怎么避免这样的情况，或者记录当前没有爬取到的网页信息，后期再爬取？
+8. scrapy的爬取不是按照顺序的，这是因为异步的原因吗？
+9. 如果今天爬取到5万条数据的时候出现异常，比如403,500等情况，下次爬取的时候，怎么自动执行从当前数据以后的爬取工作？
