@@ -1,0 +1,75 @@
+from selenium import webdriver
+import re
+from selenium.webdriver.common.by import By
+import time
+import pymysql
+import pandas as pd
+import requests
+import json
+import pymysql
+connent = pymysql.connect(host='localhost', user='root', passwd='hh226752', db='flightradar24', charset='utf8')
+cursor = connent.cursor()
+browser = webdriver.PhantomJS()
+browser.get("https://www.flightradar24.com/data/airports")
+title = browser.find_elements_by_css_selector('#tbl-datatable > tbody > tr> td> a')
+
+# C_lis得到所有国家名称列表
+C_lis = []
+for i in title:
+    if len(i.text)>1:
+        L = i.text.replace("'", "")
+        L1 = L.replace("(", "")
+        L2 = L1.replace(")", "")
+        L3 = L2.replace(",", "")
+        L4 = L3.replace(" ", "-")
+        #print(L4)
+        C_lis.append(L4)
+print('国家数量：',len(C_lis))
+
+#得到所有国家的url
+url_list = []
+for i in C_lis:
+    url = "https://www.flightradar24.com/data/airports/"
+    url_list.append(url+i)
+    print(url+i)
+#print(url_list)
+# L = dict(map(lambda x, y: [x, y], C_lis, url_list))
+# print(L)
+
+
+#得到国家所有机场的 （国家名称）（机场代码） （机场经度） （机场纬度）
+lis = []
+#国家机场代码
+n = 0
+country_code = []
+count = []
+
+# for i in C_lis:
+#     url = 'https://www.flightradar24.com/data/airports/{}'
+#     # 开启新页面，进行解析网页  获取 （机场代码） （机场经度） （机场纬度）
+#     browser.get(url.format(i))
+#     print(i)
+#     title_xin = browser.find_elements_by_css_selector('#tbl-datatable > tbody > tr> td> a')
+#     n += 1
+#     count.append(i)
+    # for j in title_xin:
+    #     if len(j.text)>1:
+    #         flight_name = j.get_attribute('title')
+    #         # 获取机场号码
+    #         ph = j.get_attribute('data-iata')
+    #         # 得到经度
+    #         jindu = j.get_attribute('data-lat')
+    #         # 得到纬度
+    #         weidu = j.get_attribute('data-lon')
+    #         #lis1 = [flight_name, ph, jindu, weidu]
+    #         sql = "insert into test(Countries,age,code,name,stu) values(%s,%s,%s,%s,%s)"
+    #         param = (i,flight_name,ph,jindu,weidu)
+    #         cursor.execute(sql,param)
+    #         connent.commit()
+    #         #lis.append(lis1)
+            #print('写入成功')
+            #country_code.append(ph)
+            # print('国家名称：',i,'机场名称：',flight_name,'机场代码：',ph,'机场经度：',jindu,'机场纬度：',weidu)
+            # print('解析出国家的数量：',n)
+connent.close()
+browser.close()
