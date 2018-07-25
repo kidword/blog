@@ -1,0 +1,21 @@
+1.GET https://www.baidu.com/ HTTP/1.1
+2.Host: www.baidu.com
+3.Connection: keep-alive
+4.Upgrade-Insecure-Requests: 1
+5.User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36
+6.Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
+7.Referer: http://www.baidu.com/
+8.Accept-Encoding: gzip, deflate, sdch, br
+9.Accept-Language: zh-CN,zh;q=0.8,en;q=0.6
+10.Cookie: BAIDUID=04E4001F34EA74AD4601512DD3C41A7B:FG=1; BIDUPSID=04E4001F34EA74AD4601512DD3C41A7B; PSTM=1470329258; MCITY=-343%3A340%3A; BDUSS=nF0MVFiMTVLcUh-Q2MxQ0M3STZGQUZ4N2hBa1FFRkIzUDI3QlBCZjg5cFdOd1pZQVFBQUFBJCQAAAAAAAAAAAEAAADpLvgG0KGyvLrcyfrG-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFaq3ldWqt5XN; H_PS_PSSID=1447_18240_21105_21386_21454_21409_21554; BD_UPN=12314753; sug=3; sugstore=0; ORIGIN=0; bdime=0; H_PS_645EC=7e2ad3QHl181NSPbFbd7PRUCE1LlufzxrcFmwYin0E6b%2BW8bbTMKHZbDP0g; BDSVRTM=0
+
+1.get 请求方法
+2.host：(主机端口号)
+3.connection（连接类型）
+4.Upgrade-Insecure-Requests (升级为HTTPS请求)
+5.User-Agent (浏览器名称)
+6.Accept (传输文件类型)
+7. Referer (页面跳转处)
+8.Accept-Encoding（文件编解码格式）
+9.Accept-Language（语言种类） Accept-Charset（字符编码）
+10.cookie
