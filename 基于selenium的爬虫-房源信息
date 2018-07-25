@@ -8,11 +8,6 @@ cursor = connent.cursor()
 browser=webdriver.Chrome()
 browser.get('https://bj.5i5j.com/ershoufang/daxingqu/')
 
-# Er_name = browser.find_elements_by_css_selector('body > div.pListBox.mar > div.lfBox.lf > div.list-con-box > ul > li> div.listCon > div.listX > p:nth-child(2) > a')
-# Price = browser.find_elements_by_css_selector('body > div.pListBox.mar > div.lfBox.lf > div.list-con-box > ul > li> div.listCon > div.listX > div > p.redC > strong')
-# Dan_Price = browser.find_elements_by_css_selector('body > div.pListBox.mar > div.lfBox.lf > div.list-con-box > ul > li> div.listCon > div.listX > div > p:nth-child(2)')
-# Hu_Xing = browser.find_elements_by_css_selector('body > div.pListBox.mar > div.lfBox.lf > div.list-con-box > ul > li> div.listCon > div.listX > p:nth-child(1)')
-#
 n = 0
 ll = []
 url = 'https://bj.5i5j.com/ershoufang/daxingqu/n{}'
