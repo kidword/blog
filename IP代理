@@ -1,0 +1,9 @@
+1.国内高匿免费代理：http://www.xicidaili.com/nn/
+
+import requests
+proxies = {
+    'http': 'http://221.228.17.172:8181',           #proxies 设置代理ip
+    'http': 'http://219.141.153.38'
+}
+resp = requests.get('https://www.baidu.com', proxies=proxies)
+print(resp.text)
