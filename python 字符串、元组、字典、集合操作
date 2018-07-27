@@ -2,5 +2,8 @@
 
 2.列表['{},{}']去除列表中的 '' 变成 [{},{}]
 
-  
+3.lis = ["Cote D'ivoire (ivory Coast)", 'Cocos (keeling) Islands','Virgin Islands, Us']
+  要求：去除lis_new列表中 ， （）  '   然后用 - 连接所有单词
+  转换成 lis = ["Cote-Divoire-ivory-Coast", 'Cocos-keeling-Islands','Virgin-Islands-Us']
+
   
