@@ -1,0 +1,2 @@
+查询flight表中，Take_off_airport_name字段值重复的数据及重复次数；
+select Take_off_airport_name,count(*) as count from flight group by Take_off_airport_name having count>1;
