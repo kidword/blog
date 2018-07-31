@@ -1,2 +1,11 @@
-查询flight表中，Take_off_airport_name字段值重复的数据及重复次数；
+1.查询flight表中，Take_off_airport_name字段值重复的数据及重复次数；
 select Take_off_airport_name,count(*) as count from flight group by Take_off_airport_name having count>1;
+
+2.查询flight表中，Countries='Zimbabwe'的信息；
+select * from test where Countries='Zimbabwe';
+
+3.设置自增
+ALTER TABLE `test` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+
+4.设置主键
+ALTER TABLE student ADD PRIMARY KEY(id);
