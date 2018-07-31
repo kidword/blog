@@ -1,0 +1,17 @@
+# UA, User Agent 用户身份描述
+# 描述浏览器和设备信息
+from urllib import request
+
+url = 'http://www.baidu.com'
+
+# 模拟安卓设备用mozilla浏览器访问百度首页
+headers = {
+    'User-Agent':'Mozilla/5.0 (Android; Mobile; rv:14.0) Gecko/14.0 Firefox/14.0'
+}
+
+req = request.Request(url,headers=headers)
+rsp = request.urlopen(req)
+
+html = rsp.read().decode()
+print(html)
+
