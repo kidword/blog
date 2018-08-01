@@ -1,0 +1,9 @@
+from bs4 import BeautifulSoup
+
+# 创建一个beautifulsoup的对象 soup
+html = '<a herf = #>'
+soup = BeautifulSoup(html)
+
+soup.title # 查找title标签属性
+
+soup.find_all # 查找所有，返回一个list
