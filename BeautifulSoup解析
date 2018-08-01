@@ -3,7 +3,17 @@ from bs4 import BeautifulSoup
 # 创建一个beautifulsoup的对象 soup
 html = '<a herf = #>'
 soup = BeautifulSoup(html)
+soup = BeautifulSoup(html,'lxml') # 使用lxml解析
 
 soup.title # 查找title标签属性
 
 soup.find_all # 查找所有，返回一个list
+soup.find_all(name = 'ul') #查找出name 等于ul的
+
+soup.title.string  #查找HTML中title标签中的文字内容
+
+soup.p.attrs() # 查找p标签中所有属性 比如 name class id等属性
+soup.p.attrs['name'] #找到p标签中name属性，得到p标签内容
+
+soup.a.next_sibling #查找a标签以外的内容
+soup.a.previouus_sibling #查找a标签上面的文字内容
