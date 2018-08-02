@@ -1,0 +1,26 @@
+爬虫常见错误：
+	
+	selenium.common.exceptions.NoSuchElementException ：找不到元素报错异常
+
+	selenium.common.exceptions.WebDriverException ：驱动错误异常
+
+	selenium.common.exceptions.InvalidElementState：无效的元素状态异常
+
+	521  504 500 418
+
+	UnicodeEncodeError: 'gbk' codec can't encode character '\xa9' in position 12692: illegal multibyte sequence
+
+	AssertionError: 0 columns passed, passed data had 14 columns
+
+新浪微博：
+
+	用户名加密目前采用Base64加密算法
+
+	登录密码的加密算法使用RSA2
+
+
+国家企业信息查询系统：
+
+	网页可以检查出selenium和phantomjs自动测试工具
+
+	会封禁ip
