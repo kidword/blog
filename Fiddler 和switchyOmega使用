@@ -1,1 +1,6 @@
 1.Fiddler的使用说明
+
+ 下载完成后-->开始设置fiddler-->tools-->https-->选择 Ignore server certificate errors(unsafe) (fiddler抓包可以选择浏览器抓包)-->在actions按钮中
+ 选择第一个按钮一直确定就行--> connections中-->allow remote 
+ 
+ fiddler抓包：属于代理一样，服务器会发送数据先经过fiddler最后经过客户端，相对传输的数据fiddler就可以在中间获取到相关的数据信息；
