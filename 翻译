@@ -1,15 +1,9 @@
+import urllib
 import urllib.request
-import urllib.parse
 import json
-import pymysql
-
-list1=['airport','big','data','python']
-
 
 result = []
 for i in list1:
-
-
     url = 'http://fanyi.youdao.com/translate?smartresult=dict&smartresult=rule'
     data = {}
     data['i'] = i
@@ -31,4 +25,3 @@ for i in list1:
     result.append(target['translateResult'][0][0]['tgt'])
 
 print(result)
-
