@@ -1,0 +1,33 @@
+from selenium import webdriver
+import pymysql as py
+driver = webdriver.PhantomJS()
+
+# 北京14个区url
+url_lis = ['https://bj.lianjia.com/zufang/dongcheng/','https://bj.lianjia.com/zufang/xicheng/',
+    'https://bj.lianjia.com/zufang/chaoyang/','https://bj.lianjia.com/zufang/haidian/',
+    'https://bj.lianjia.com/zufang/fengtai/','https://bj.lianjia.com/zufang/shijingshan/',
+    'https://bj.lianjia.com/zufang/tongzhou/','https://bj.lianjia.com/zufang/changping/',
+    'https://bj.lianjia.com/zufang/daxing/','https://bj.lianjia.com/zufang/yizhuangkaifaqu/',
+    'https://bj.lianjia.com/zufang/shunyi/','https://bj.lianjia.com/zufang/fangshan/',
+    'https://bj.lianjia.com/zufang/mentougou/','https://lf.lianjia.com/zufang/yanjiao/']
+u_lis = ['https://bj.lianjia.com/zufang/dongcheng/']
+
+for i in u_lis:
+    # 进入网页
+    driver.get(i)
+
+    #获取信息
+    name1 = driver.find_elements_by_css_selector('#house-lst > li> div.info-panel > div.col-1 > div.other > div > a')
+    name2 = driver.find_elements_by_css_selector('#house-lst > li> div.info-panel > div.col-1 > div.where > a > span')
+    model = driver.find_elements_by_css_selector('#house-lst > li> div.info-panel > div.col-1 > div.where > span.zone > span')
+    area = driver.find_elements_by_css_selector('#house-lst > li div.info-panel > div.col-1 > div.where > span.meters')
+    price = driver.find_elements_by_css_selector('#house-lst > li> div.info-panel > div.col-3 > div.price > span')
+    time = driver.find_elements_by_css_selector('#house-lst > li> div.info-panel > div.col-3 > div.price-pre')
+
+
+
+driver.quit()
+
+# 开启14个线程，每个线程url不同
+# 在数据库中根据起飞机场代码和降落机场代码的不同，去掉重复数据
+# 6个对象都要执行一个方法
