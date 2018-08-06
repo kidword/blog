@@ -1,0 +1,90 @@
+from selenium import webdriver
+import pymysql as py
+import threading
+from bs4 import BeautifulSoup
+import lxml
+import time
+import pandas as pd
+
+driver = webdriver.PhantomJS()
+
+def lianjie():
+    conn = py.connect(host='localhost', user='root', passwd='hh226752', db='flightradar24', charset='utf8')
+    return conn
+conn = lianjie()
+# 解析
+def parse(url,qu,num):
+    for i in range(1,num):
+        urls = url+str(i)
+        driver.get(urls)
+        name = driver.find_elements_by_css_selector('div.pListBox.mar.main > div.lfBox.lf > div.list-con-box > ul > li> div.listCon > div.listX > p:nth-child(2) > a')
+        Hu_Xing = driver.find_elements_by_css_selector('div.pListBox.mar > div.lfBox.lf > div.list-con-box > ul > li> div.listCon > div.listX > p:nth-child(1)')
+        price = driver.find_elements_by_css_selector('div.pListBox.mar.main > div.lfBox.lf > div.list-con-box > ul > li> div.listCon > div.listX > div > p.redC > strong')
+        name_lis = []  # 房名
+        for v in name:
+            name_lis.append(v.text)
+        price_lis = [] # 出租价
+        for m in price:
+            price_lis.append(m.text)
+        huxing_lis = []  # 小区户型
+        mianji_lis = []  # 小区面积
+        louceng_lis = []  # 小区楼层
+        chaoxiang_lis = []  # 小区朝向
+        zhuangxiu_lis = [] # 小区装修
+        for k in Hu_Xing:
+            try:
+                str1 = k.text
+                ll = str1.split('·')
+                huxing = ll[0]
+                mianji = ll[1]
+                chaoxiang = ll[2]
+                louceng = ll[3]
+                zhuangxiu = ll[4]
+                huxing_lis.append(huxing)
+                mianji_lis.append(mianji)
+                louceng_lis.append(chaoxiang)
+                chaoxiang_lis.append(louceng)
+                zhuangxiu_lis.append(zhuangxiu)
+            except IndexError:
+                pass
+
+        Mess = zip(name_lis,huxing_lis,mianji_lis,price_lis,louceng_lis,chaoxiang_lis,zhuangxiu_lis)
+        #lis_info = []
+        for n in Mess:
+            lis = list(n)
+            #lis_info.append(qu)
+            #lis_info.append(lis)
+            cur = conn.cursor()
+            sql = "insert into zufang(qu,name,huxing,mianji,price,louceng,changxiang,zhuangxiu) values(%s,%s,%s,%s,%s,%s,%s,%s)"
+            params = (qu, lis[0], lis[1], lis[2], lis[3], lis[4], lis[5], lis[6])
+            cur.execute(sql, params)
+            conn.commit()
+            print(qu,lis)
+        # name = ['qu','name','huxing','mianji','price','louceng','chaoxiang','zhuangxiu']
+        # test = pd.DataFrame(columns=name,data=lis_info)
+        # test.to_csv(r'D:\zufang.csv')
+if __name__ == '__main__':
+    t1 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/chaoyangqu/n','朝阳区',244)) #244
+    t2 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/haidianqu/n','海淀区',139))
+    t3 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/dongchengqu/n','东城区',42))
+    t4 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/xichengqu/n','西城区',80))
+    t5 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/fengtaiqu/n','丰台区',100))
+    t6 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/shijingshanqu/n','石景山区',26))
+    t7 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/tongzhouqu/n','通州区',157))
+    t8 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/changpingqu/n','昌平区',81))
+    t9 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/daxingqu/n','大兴区',62))
+    t10 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/shunyiqu/n','顺义区',49))
+    t11 = threading.Thread(target=parse,args=('https://bj.5i5j.com/zufang/fangshanqu/n','房山区',24))
+    t1.start()
+    # t2.start()
+    # t3.start()
+    # t4.start()
+    # t5.start()
+    # t6.start()
+    # t7.start()
+    # t8.start()
+    # t9.start()
+    # t10.start()
+    # t11.start()
+    #conn.close()
+    #driver.quit()
