@@ -6,45 +6,67 @@ from lxml import etree
 import random
 import pymysql as py
 
-url_lis = ['https://bj.lianjia.com/zufang/dongcheng/','https://bj.lianjia.com/zufang/xicheng/',
-    'https://bj.lianjia.com/zufang/chaoyang/','https://bj.lianjia.com/zufang/haidian/',
-    'https://bj.lianjia.com/zufang/fengtai/','https://bj.lianjia.com/zufang/shijingshan/',]
 
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'}
+headers = ['Mozilla/5.0 (Windows NT 6.2; rv:16.0) Gecko/20100101 Firefox/16.0','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36']
 
-proxies = {
-    'http':'http:121.31.150.47:8123',
-    'http':'220.184.215.248:6666'
-}
+pro = ['http:121.31.150.47:8123','http:220.184.215.248:6666']
+def lianjie():
+    conn = py.connect(host='localhost', user='root', passwd='hh226752', db='flightradar24', charset='utf8')
+    return conn
+conn = lianjie()
 
-def parse(url):
-    req = requests.get(url = url,headers=headers, proxies=proxies)
-    html = BeautifulSoup(req.text, 'lxml')
+def parse(url,num,qu):
+    for u in range(1,num):
+        urls = url+str(u)
+        req = requests.get(url = urls,headers={'User-Agent':random.choice(headers)}, proxies={'http':random.choice(pro)})
+        html = BeautifulSoup(req.text, 'lxml')
+        # 创建CSS选择器
+        result = html.select('div[class="info-panel"]')
+        #print(result)
+        for site in result:
+            name = site.select('span')[0].get_text() #名称
+            huxing = site.select('span')[1].get_text()  # 户型
+            mianji = site.select('.meters')[0].get_text() # 面积
+            chaoxiang = site.select('span')[4].get_text() # 朝向
+            price = site.select('.price span')[0].get_text() # 价格
+            data = site.select('.price-pre')[0].get_text() # 发布时间
+            #print(mianji)
+            con = conn.cursor()
+            sql = "insert into zufang_copy(qu,name,huxing,mianji,chaoxiang,price,data) values(%s,%s,%s,%s,%s,%s,%s)"
+            params = (qu,name,huxing,mianji,chaoxiang,price,data)
+            while True:
+                try:
+                    with conn.cursor() as cursor:  # 获取游标
+                        con.execute(sql, params)
+                    conn.commit()
+                    break
+                except Exception:
+                    conn.ping(True)
+            print(qu,name,huxing,mianji)
 
-    # 创建CSS选择器
-    result = html.select('div[class="info-panel"]')
-    print(result)
-    for site in result:
-        name = site.select('span')[0].get_text()
-        huxing = site.select('span')[1].get_text()
-        mianji = site.select('span')[2].get_text()
-        chaoxiang = site.select('span')[3].get_text()
-        name1 = site.select('.other a')[0].get_text()
-        price = site.select('.price span')[0].get_text()
 
-    # result2 = html.select('tr[class="odd"]')
-    # result += result2
+# 创建新线程
+thread1 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/dongcheng/pg',19,'东城区'))
+thread2 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/xicheng/pg',29,'西城区'))
+thread3 = threading.Thread(target=parse,args=( 'https://bj.lianjia.com/zufang/chaoyang/pg',101,'朝阳区'))
+thread4 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/haidian/pg',62,'海淀区'))
+thread5 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/fengtai/pg',50,'丰台区'))
+thread6 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/shijingshan/pg',12,'石景山区'))
+thread7 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/tongzhou/pg',38,'通州区'))
+thread8 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/changping/pg',29,'昌平区'))
+thread9 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/daxing/pg',24,'大兴区'))
+thread10 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/shunyi/pg',24,'顺义区'))
+thread11 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/tongzhou/pg',12,'房山区'))
+thread12 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/yanjiao/pg',101,'燕郊'))
+
+# 开启线程
+threads = [thread1,thread2,thread3,thread4,thread5,thread6,thread7,thread8,thread9,thread10,thread11]
+for t in threads:
+    t.start()
+    t.join()
 
 
-t1 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/dongcheng/',))
-t2 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/xicheng/',))
-t3 = threading.Thread(target=parse,args=( 'https://bj.lianjia.com/zufang/chaoyang/',))
-t4 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/haidian/',))
-t5 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/fengtai/',))
-t6 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/shijingshan/',))
-t1.start()
-#t2.start()
-# t3.start()
-# t4.start()
-# t5.start()
-# t6.start()
+
+
+
+
