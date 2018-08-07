@@ -20,3 +20,5 @@ soup.a.previouus_sibling #查找a标签上面的文字内容
 
 next_sibling  
 soup.find_all('tr', attrs={'class': re.compile("(odd)|()")})
+
+soup.find('input',attrs={'name':'_xsrf'}).get('value')
