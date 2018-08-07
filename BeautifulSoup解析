@@ -17,3 +17,6 @@ soup.p.attrs['name'] #找到p标签中name属性，得到p标签内容
 
 soup.a.next_sibling #查找a标签以外的内容
 soup.a.previouus_sibling #查找a标签上面的文字内容
+
+next_sibling  
+soup.find_all('tr', attrs={'class': re.compile("(odd)|()")})
