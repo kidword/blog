@@ -5,7 +5,8 @@ import lxml
 from lxml import etree
 import random
 import pymysql as py
-
+import time
+import datetime
 
 headers = ['Mozilla/5.0 (Windows NT 6.2; rv:16.0) Gecko/20100101 Firefox/16.0','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36']
 
@@ -31,17 +32,17 @@ def parse(url,num,qu):
             price = site.select('.price span')[0].get_text() # 价格
             data = site.select('.price-pre')[0].get_text() # 发布时间
             #print(mianji)
-            con = conn.cursor()
-            sql = "insert into zufang_copy(qu,name,huxing,mianji,chaoxiang,price,data) values(%s,%s,%s,%s,%s,%s,%s)"
-            params = (qu,name,huxing,mianji,chaoxiang,price,data)
-            while True:
-                try:
-                    with conn.cursor() as cursor:  # 获取游标
-                        con.execute(sql, params)
-                    conn.commit()
-                    break
-                except Exception:
-                    conn.ping(True)
+            # con = conn.cursor()
+            # sql = "insert into zufang_copy(qu,name,huxing,mianji,chaoxiang,price,data) values(%s,%s,%s,%s,%s,%s,%s)"
+            # params = (qu,name,huxing,mianji,chaoxiang,price,data)
+            # while True:
+            #     try:
+            #         with conn.cursor() as cursor:  # 获取游标
+            #             con.execute(sql, params)
+            #         conn.commit()
+            #         break
+            #     except Exception:
+            #         conn.ping(True)
             print(qu,name,huxing,mianji)
 
 
@@ -61,9 +62,14 @@ thread12 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/ya
 
 # 开启线程
 threads = [thread1,thread2,thread3,thread4,thread5,thread6,thread7,thread8,thread9,thread10,thread11]
-for t in threads:
-    t.start()
-    t.join()
+
+# 设置爬虫定时
+def data():
+    while True:
+        for t in threads:
+            t.start()
+            t.join()
+        time.sleep(604800)
 
 
 
