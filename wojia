@@ -75,4 +75,6 @@ def data():
 
 
 
-
+ 
+area = site.select('.con a')[0].get_text()
+louceng = site.select('.con span')[0].next_sibling
