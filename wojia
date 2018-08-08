@@ -78,3 +78,19 @@ def data():
  
 area = site.select('.con a')[0].get_text()
 louceng = site.select('.con span')[0].next_sibling
+
+ for u in range(1,page+1):
+        urls = url+str(u)
+        #print(urls)
+        req = requests.get(url = urls,headers={'User-Agent':random.choice(headers)}, proxies={'http':random.choice(pro)})
+        html = BeautifulSoup(req.text, 'lxml')
+        # 创建CSS选择器
+        result = html.select('div[class="info-panel"]')
+        for site in result:
+            name = site.select('span')[0].get_text() #名称
+            huxing = site.select('span')[1].get_text()  # 户型
+            mianji = site.select('.meters')[0].get_text() # 面积
+            chaoxiang = site.select('span')[4].get_text() # 朝向
+            price = site.select('.price span')[0].get_text() # 价格
+            data = site.select('.price-pre')[0].get_text() # 发布时间
+            print(qu, name, huxing, mianji,price)
