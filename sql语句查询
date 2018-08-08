@@ -21,10 +21,10 @@ SELECT count(*),Take_off_airport_code,Landing_airport_code from flight_info_copy
 GROUP BY Take_off_airport_code,Landing_airport_code having count(*) > 1;
 
 
-DELETE from flight_info_copy WHERE (Take_off_airport_code,Landing_airport_code) in   
-(SELECT Take_off_airport_code,Landing_airport_code from (SELECT Take_off_airport_code,Landing_airport_code FROM flight_info_copy GROUP BY Take_off_airport_code,Landing_airport_code HAVING COUNT(*)>1) s1)   
+DELETE from flight_xin_copy WHERE (Take_off_airport_code,Landing_airport_code) in   
+(SELECT Take_off_airport_code,Landing_airport_code from (SELECT Take_off_airport_code,Landing_airport_code FROM flight_info_copy GROUP BY Take_off_airport_code,Landing_airport_code HAVING COUNT(*)>1))   
 AND  
-id NOT in (SELECT id from (SELECT id FROM flight_info_copy GROUP BY Take_off_airport_code,Landing_airport_code HAVING COUNT(*)>1) s2); 
+id NOT in (SELECT id from (SELECT id FROM flight_info_copy GROUP BY Take_off_airport_code,Landing_airport_code HAVING COUNT(*)>1)); 
 
 
 select count(*) from flight_info_copy;
