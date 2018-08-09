@@ -15,7 +15,7 @@ def getmysql():
 
 conn = getmysql()
 cur = conn.cursor()
-cn = cur.execute('select qu,name from zufang')
+cn = cur.execute('select qu,name from zufang_copy')
 rows = cur.fetchall()
 rows = list(rows)
 
@@ -35,6 +35,7 @@ def getarea():
         reslt = soup.select('#no_0 p')
         for area in reslt:
             areas = area.select('br')[0].next_sibling
+            print(areas)
             try:
                 ar = areas[3:].split(',')
                 list_info.append(ar[0])
@@ -43,15 +44,24 @@ def getarea():
                 list_info.append(ss)
         driver.find_element_by_id('localvalue').clear()
 
-
+def Intomysql():
+    con = conn.cursor()
+    sql = "insert into zufang_copy_copy(lat,lon) values(%s,%s)"
+    params = (list_info[0],list_info[1])
+    con.execute(sql, params)
+    conn.commit()
 
 # 去掉那些错误数据
-def quchu():
-    qu_conn = getmysql()
-    qu_cur = qu_conn.cursor()
-    cn = cur.execute('select qu,name from zufang')
+# def quchu():
+#     qu_conn = getmysql()
+#     qu_cur = qu_conn.cursor()
+#     cn = cur.execute('select qu,name from zufang')
 
 if __name__ == '__main__':
     Thread1 = threading.Thread(target=getarea)
-    threads = [Thread1]
+    Thread2 = threading.Thread(target=getarea)
+    threads = [Thread1,Thread2]
+    for i in threads:
+        i.start()
+        i.join()
     driver.quit()
