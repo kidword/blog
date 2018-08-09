@@ -1,0 +1,66 @@
+'''根据百度地图api 得到小区经度，纬度信息'''
+
+'''1.东城区
+     1.1 安定门
+        1.1.1 安德里北街25号院
+'''
+# 读取数据库qu和name字段去网页上搜索坐标信息放到数据库中
+import pymysql as py
+import requests
+from selenium import webdriver
+from selenium.webdriver.common import keys
+import time
+from bs4 import BeautifulSoup
+import lxml
+import re
+
+driver = webdriver.PhantomJS()
+def getmysql():
+    return py.connect(host='localhost', user='root', password='hh226752', db='flightradar24', charset='utf8')
+
+conn = getmysql()
+cur = conn.cursor()
+cn = cur.execute('select qu,name from zufang')
+rows = cur.fetchall()
+rows = list(rows)
+
+def getarea():
+    global soup
+    driver.get('http://api.map.baidu.com/lbsapi/getpoint/index.html')
+    for name in rows:
+        names = str(name[0])+str(name[1])
+        driver.find_element_by_id('localvalue').send_keys(names)
+        driver.find_element_by_class_name('button').click()
+        # 点击完成必须休眠
+        time.sleep(1)
+        try:
+            html = driver.page_source
+            soup = BeautifulSoup(html, 'lxml')
+            reslt = soup.select('#no_0 p')
+        except:
+            print('没找到元素')
+            for area in reslt:
+                try:
+                    areas = area.select('br')[0].next_sibling
+                    ar = areas[3:].split(',')
+                    print(name[0],name[1],ar[0],ar[1])
+                except:
+                    print('没找到坐标')
+                try:
+                    con = conn.cursor()
+                    sql = "insert into zufang_copy_copy(lat,lon) values(%s,%s)"
+                    params = (ar[0],ar[1])
+                    con.execute(sql, params)
+                    conn.commit()
+                except:
+                    print('数据库连接错误')
+        driver.find_element_by_id('localvalue').clear()
+# 去掉那些错误数据
+def quchu():
+    qu_conn = getmysql()
+    qu_cur = qu_conn.cursor()
+    cn = cur.execute('select qu,name from zufang')
+
+if __name__ == '__main__':
+    getarea()
+    driver.quit()
