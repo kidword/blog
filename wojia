@@ -8,89 +8,104 @@ import pymysql as py
 import time
 import datetime
 
-headers = ['Mozilla/5.0 (Windows NT 6.2; rv:16.0) Gecko/20100101 Firefox/16.0','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36']
+headers = ['Mozilla/5.0 (Windows NT 6.2; rv:16.0) Gecko/20100101 Firefox/16.0',
+           'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
+           "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
+           "Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
+           "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6",
+           "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6",
+           "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1",
+           "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5",
+           "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5",
+           "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+           ]
 
-pro = ['http:121.31.150.47:8123','http:220.184.215.248:6666']
+# 代理池
+#pro = ['http:121.31.150.47:8123','http:220.184.215.248:6666']
 def lianjie():
     conn = py.connect(host='localhost', user='root', passwd='hh226752', db='flightradar24', charset='utf8')
     return conn
 conn = lianjie()
 
-def parse(url,num,qu):
-    for u in range(1,num):
+def parse(url,qu):
+    # 必须要通过解析得到页码数
+    global name,huxing,mianji,chaoxiang,price,data,area,louceng,page,result
+    new = url+str(1)
+    htm = requests.get(url, headers={'User-Agent': random.choice(headers)})
+    soup = BeautifulSoup(htm.text, 'lxml')
+    try:
+        next = soup.find('div',attrs={'class':'page-box house-lst-page-box'}).get('page-data')
+        data = eval(next)['totalPage']
+        page = int(data)
+    except:
+        print('未解析出page页码数')
+    for u in range(1,page+1):
         urls = url+str(u)
-        req = requests.get(url = urls,headers={'User-Agent':random.choice(headers)}, proxies={'http':random.choice(pro)})
+        req = requests.get(url = urls,headers={'User-Agent':random.choice(headers)})
         html = BeautifulSoup(req.text, 'lxml')
-        # 创建CSS选择器
-        result = html.select('div[class="info-panel"]')
-        #print(result)
+        try:
+            result = html.select('div[class="info-panel"]')
+        except:
+            print('未解析出对应div')
         for site in result:
-            name = site.select('span')[0].get_text() #名称
-            huxing = site.select('span')[1].get_text()  # 户型
-            mianji = site.select('.meters')[0].get_text() # 面积
-            chaoxiang = site.select('span')[4].get_text() # 朝向
-            price = site.select('.price span')[0].get_text() # 价格
-            data = site.select('.price-pre')[0].get_text() # 发布时间
-            #print(mianji)
-            # con = conn.cursor()
-            # sql = "insert into zufang_copy(qu,name,huxing,mianji,chaoxiang,price,data) values(%s,%s,%s,%s,%s,%s,%s)"
-            # params = (qu,name,huxing,mianji,chaoxiang,price,data)
-            # while True:
-            #     try:
-            #         with conn.cursor() as cursor:  # 获取游标
-            #             con.execute(sql, params)
-            #         conn.commit()
-            #         break
-            #     except Exception:
-            #         conn.ping(True)
-            print(qu,name,huxing,mianji)
+            try:
+                name = site.select('span')[0].get_text() #名称
+                area = site.select('.con a')[0].get_text()
+                louceng = site.select('.con span')[0].next_sibling
+                huxing = site.select('span')[1].get_text()  # 户型
+                mianji = site.select('.meters')[0].get_text() # 面积
+                chaoxiang = site.select('span')[4].get_text() # 朝向
+                price = site.select('.price span')[0].get_text() # 价格
+                data = site.select('.price-pre')[0].get_text() # 发布时间
+                print(qu,name,area,louceng, huxing, mianji,chaoxiang,price,data)
+            except:
+                print('未解析出对应div下面元素')
+            try:
+                con = conn.cursor()
+                sql = "insert into zufang_copy(qu,name,area,louceng,price) values(%s,%s,%s,%s,%s)"
+                params = (qu,name,area,louceng,price)
+                # con.execute(sql, params)
+                # conn.commit()
+            except Exception:
+                print('数据库连接错误，请检查数据......')
+
 
 
 # 创建新线程
-thread1 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/dongcheng/pg',19,'东城区'))
-thread2 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/xicheng/pg',29,'西城区'))
-thread3 = threading.Thread(target=parse,args=( 'https://bj.lianjia.com/zufang/chaoyang/pg',101,'朝阳区'))
-thread4 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/haidian/pg',62,'海淀区'))
-thread5 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/fengtai/pg',50,'丰台区'))
-thread6 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/shijingshan/pg',12,'石景山区'))
-thread7 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/tongzhou/pg',38,'通州区'))
-thread8 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/changping/pg',29,'昌平区'))
-thread9 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/daxing/pg',24,'大兴区'))
-thread10 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/shunyi/pg',24,'顺义区'))
-thread11 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/tongzhou/pg',12,'房山区'))
-thread12 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/yanjiao/pg',101,'燕郊'))
+thread1 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/dongcheng/pg','东城区'))
+thread2 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/xicheng/pg','西城区'))
+thread3 = threading.Thread(target=parse,args=( 'https://bj.lianjia.com/zufang/chaoyang/pg','朝阳区'))
+thread4 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/haidian/pg','海淀区'))
+thread5 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/fengtai/pg','丰台区'))
+thread6 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/shijingshan/pg','石景山区'))
+thread7 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/tongzhou/pg','通州区'))
+thread8 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/changping/pg','昌平区'))
+thread9 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/daxing/pg','大兴区'))
+thread10 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/shunyi/pg','顺义区'))
+thread11 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/tongzhou/pg','房山区'))
+thread12 = threading.Thread(target=parse,args=('https://bj.lianjia.com/zufang/yanjiao/pg','燕郊'))
 
-# 开启线程
-threads = [thread1,thread2,thread3,thread4,thread5,thread6,thread7,thread8,thread9,thread10,thread11]
 
-# 设置爬虫定时
+# 数据去重
 def data():
-    while True:
-        for t in threads:
-            t.start()
-            t.join()
-        time.sleep(604800)
+    try:
+        con = conn.cursor()
+        sql = ""
+        con.execute(sql)
+        conn.commit()
+    except:
+        print('sql语句发生错误')
+# 开启线程
+if __name__ == '__main__':
+    threads = [thread1,thread2,thread3,thread4,thread5,thread6,thread7,thread8,thread9,thread10,thread11,thread12]
+    for t in threads:
+        t.start()
+        t.join()
+    #data()
+    # 关闭数据库连接
+    conn.close()
 
 
 
 
 
- 
-area = site.select('.con a')[0].get_text()
-louceng = site.select('.con span')[0].next_sibling
-
- for u in range(1,page+1):
-        urls = url+str(u)
-        #print(urls)
-        req = requests.get(url = urls,headers={'User-Agent':random.choice(headers)}, proxies={'http':random.choice(pro)})
-        html = BeautifulSoup(req.text, 'lxml')
-        # 创建CSS选择器
-        result = html.select('div[class="info-panel"]')
-        for site in result:
-            name = site.select('span')[0].get_text() #名称
-            huxing = site.select('span')[1].get_text()  # 户型
-            mianji = site.select('.meters')[0].get_text() # 面积
-            chaoxiang = site.select('span')[4].get_text() # 朝向
-            price = site.select('.price span')[0].get_text() # 价格
-            data = site.select('.price-pre')[0].get_text() # 发布时间
-            print(qu, name, huxing, mianji,price)
