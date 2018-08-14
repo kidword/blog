@@ -13,3 +13,14 @@
 13.怎样将列表中的数据循环添加到数据库中？
 14.将列表存csv文件，csv文件导入数据库中？
 15.得到一个list 以后， 通过list里面的每个元素 在主表中查找信息,然后写入新的csv 或者mysql 数据库中
+
+
+正则
+
+新浪微博接口
+
+weibo模块 安装
+
+selenium的多线程
+
+多线程开启是 insert into  发生 attributaerror
