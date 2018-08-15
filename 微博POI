@@ -1,0 +1,22 @@
+微博POI签到数
+
+POI:兴趣点
+
+	名称、类别、经度、纬度
+
+抓取微博签到数据，分析北京地区人群密集的地方
+
+
+参考链接：https://github.com/lzxue/WeiboDataShare
+
+	 廖雪峰：https://www.liaoxuefeng.com/article/00137389308005720bf24cb6cf14d9e897e7026dbc6a842000
+
+	 https://blog.csdn.net/betwater/article/details/53747754
+
+	 安装weibo库出现：UnicodeDecodeError: 'gbk' codec can't decode byte 0xae in position 241: illegal multibyte sequence
+
+	 SDK：软件开发工具包
+
+
+
+微博api POI的热度？
