@@ -35,3 +35,5 @@ SDK：software development kit  软件开发工具包
 poiid(序号), title(地点名), address(地址),lon(经度), lat(纬度)
 
 city(城市代码), c ategory_name(POI类别代码), checkin_num(签到次数), photo_numPOI(照片次数)
+
+http://github.liaoxuefeng.com/sinaweibopy/
