@@ -21,4 +21,17 @@ POI:兴趣点
 
 微博api POI的热度？
 
-https://blog.csdn.net/xiangyong58/article/details/51506958
+获取北京POI所有点数据，再看POI点的签到数的活跃度
+
+
+
+python2.7安装weibo.py库(python3不支持weibo.py的安装)：下载python的SDK解压   
+
+SDK：software development kit  软件开发工具包
+
+新浪微博签到POI数据通过新浪微博开放平台API获取数据：http://open.weibo.com/wiki/2/place/nearby/pois
+
+
+poiid(序号), title(地点名), address(地址),lon(经度), lat(纬度)
+
+city(城市代码), c ategory_name(POI类别代码), checkin_num(签到次数), photo_numPOI(照片次数)
