@@ -5,3 +5,4 @@
 5.python的安装包放在Libs文件中,pip.exe放在scripts中；
 6.pycharm可以修改他的执行文件，可以修改成python2.7的python.exe也可以修改成python3.6的python.exe;
 
+                                                                                                2018/8/16
