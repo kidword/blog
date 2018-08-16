@@ -1,0 +1,7 @@
+1.python中python.exe是python的执行文件；
+2.在windows中可以实现python2版本和python3版本共存；
+3.weibo.py文件在python2中安装，在python3中会报错；
+4.centos默认自带python2.6版本；
+5.python的安装包放在Libs文件中,pip.exe放在scripts中；
+6.pycharm可以修改他的执行文件，可以修改成python2.7的python.exe也可以修改成python3.6的python.exe;
+
