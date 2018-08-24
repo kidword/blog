@@ -1,0 +1,8 @@
+1.计算python程序运行时间
+
+  import datetime
+
+  starttime = datetime.datetime.now()
+  print(starttime)
+  endtime = datetime.datetime.now()
+  print((endtime - starttime).seconds)
