@@ -9,3 +9,30 @@ $(this) 表示当前对象
 $(this).next() 表示下一个元素
 $(this).next().slidDown(); 显示
 $(this).next().slidUp(); 隐藏
+
+
+4.<ul>
+        <li class="item">
+            <a href="#">体育明星</a>
+            <ul class="uitem">
+                <li><a href="#">111111111</a></li>
+                <li><a href="#">2222222</a></li>
+                <li><a href="#">3333333</a></li>
+            </ul>
+        </li>
+  </ul>
+
+<script>
+    $(function () {
+       $(".uitem").hide();
+        $(".item>a").toggle(function(){
+            $(this).next().slideDown();
+        },function(){
+            $(this).next().slideUp();
+        })
+    });
+  </script>
+  
+  
+  
+  
