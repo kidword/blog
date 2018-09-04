@@ -32,7 +32,33 @@ $(this).next().slidUp(); 隐藏
         })
     });
   </script>
+
+5. $("p:odd").css("color","red")  p标签的偶数行变成红色
+
+   $("p:even").css("color","bule")
   
+   $("p:first-child")
+   
+   $("p:nth-child(2)") 
+   
+   $("div:has(a)")
+   
+   $("a[title]")
+   
+   $("a[href^=www]")
   
-  
-  
+   $("a[href$=def]")
+   
+   $("a[href*=def]")
+   
+   $("a[href='def']")
+   
+   $(":button").attr("disabled","disabled")
+   
+   $("div:eq(2)")
+   
+   $("div:gt(2)")
+   
+   $("span").eq(2).siblings.css()  span的兄弟元素
+   
+   $("div:gt(2)")
