@@ -36,3 +36,7 @@ def kangkou():
         except requests.exceptions.ConnectionError:
             print('请求错误')
 kangkou()
+
+
+
+解析url = "https://www.marinetraffic.com/en/reports?asset_type=ports&columns=flag,portname,unlocode,photo,vessels_in_port,vessels_departures,vessels_arrivals,vessels_expected_arrivals,local_time,anchorage,geographical_area_one,geographical_area_two,coverage"
