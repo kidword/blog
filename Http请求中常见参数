@@ -19,3 +19,7 @@
 8.Accept-Encoding（文件编解码格式）
 9.Accept-Language（语言种类） Accept-Charset（字符编码）
 10.cookie
+
+
+HTTP协议：
+HTTP是一个客户端和服务器端请求和应答的标准（TCP）
