@@ -6,3 +6,32 @@
 6.pycharm可以修改他的执行文件，可以修改成python2.7的python.exe也可以修改成python3.6的python.exe;
 
                                                                                                 2018/8/16
+                                                                                                
+                                                                                                
+git 快速本地上传
+
+	1.到本地项目文件夹右键选择git bash here
+
+	2.输入个人信息(代码提交者)
+
+	  git config --global user.name "xxxx" 
+
+	  git config --global user.email xxxxx@qq.com 
+
+	3.在本地项目目录创建本地仓库
+
+ 	   git init  
+
+          输入命令后项目目录会有一个隐藏的.git文件夹
+
+          上传所有代码到本地仓库
+
+          git add .
+
+	4. git commit -m "initial commit"
+
+	5.在github上建立仓库
+
+	6.git remote add origin https://github.com/Yanyf765/hr_sys.git（上步骤复制的地址）
+
+	7.git push origin master
