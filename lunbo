@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *{padding:0px;margin: 0px}
+        .ig{position: absolute;}
+        .btn{position:absolute;height: 90px;width: 60px;background: #ccc;text-align: center;line-height: 90px;font-size: 40px}
+
+    </style>
+</head>
+<body>
+<div id="igs">
+    <div class="ig"><img src="src/img/lefttoright.png" alt=""/>
+    </div>
+    <div class="ig"><img src="src/img/lefttoright.png" alt=""/></div>
+    <div class="ig"><img src="src/img/lefttoright.png" alt=""/></div>
+</div>
+<div class="btn btn1"><</div>
+<div class="btn btn1"></div>
+</body>
+</html>
+<scritpt>
+    var i = 0;
+    var timer;
+    $(function(){
+        $("ig").eq(0).show().siblings().hide();    //第一个图片显示，兄弟图片隐藏
+        setInterval(function(){
+           i++;
+            if(i==6){
+            i=0;
+            }
+            Show()                                    //fadeIn() fadeOut 渐变
+    },4000);
+        $(".tab").hover(function(){
+        i = $(this).index();
+        Show();
+        clearInterval(timer)
+    },funtion(){
+        ShowTime();
+    });
+    $(".bnt1").click(function(){
+        clearInterval(timer);
+        if(i==0){
+        i =6;
+    }
+        i--;
+        Show();
+        ShowTime();
+    })                                            //setInterval(function(){},time) 间隔多长时间 执行function
+    });
+
+    $(".bnt2").click(function(){
+    clearInterval(timer);
+    if(i==5){
+    i =-1;
+    }
+    i++;
+    Show();
+    ShowTime();
+    })                                            //setInterval(function(){},time) 间隔多长时间 执行function
+    });
+
+    function Show(){
+        $(".ig").eq(i).fadeIn(300)siblings().fadeOut(300);
+        $(".tab").eq(i).addClass('bg').siblings().removeClass('bg')
+    };
+
+    function ShowTime(){
+        timer = setInterval(function(){
+        i++;
+        if(i==6){
+        i==0
+    }
+    Show()
+    },4000)
+    };
+</scritpt>
