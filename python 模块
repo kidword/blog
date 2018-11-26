@@ -1,4 +1,0 @@
-import time
-
-now = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())   # 2018-07-26 14:55:07
-now = time.strftime('%Y-%m-%d',time.localtime(time.time()))  # 2018-07-26
