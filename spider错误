@@ -1,9 +1,0 @@
-1.selenium.common.exceptions.NoSuchElementException ：找不到元素报错异常
-
-2.selenium.common.exceptions.WebDriverException ：驱动错误异常
-
-3.selenium.common.exceptions.InvalidElementState：无效的元素状态异常
-
-4.521  504 500 418
-
-5.UnicodeEncodeError: 'gbk' codec can't encode character '\xa9' in position 12692: illegal multibyte sequence
