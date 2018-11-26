@@ -1,0 +1,13 @@
+1.注释：<#--...-->
+2.插值：${...}或{...}
+3.列表：<#list>
+4.判断：<#if><#elseif></#else></#if> 
+5.导入：<#include>
+6.导入：<#import>
+7.定义指令:<#macro book>...</#macro><@book/>
+8.自定义标签(后台定义)：paramMap.put('content',new ContentDirective());
+  //html使用标签：<@content name="..." age="">${output}${append}</@content>
+9.空值:{value!}
+10.字符串、数字插值：<#settion number_format="currency"/> <#assign answer=42/> ${answer} --> $42
+11.日期：${lastUpdated?string("yyyy-MM-dd")!}
+12.布尔值：<#assign foo=true/>  ${foo?string("yes","no")} --> yes
