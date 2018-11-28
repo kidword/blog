@@ -1,12 +1,48 @@
 [2018-11-28]
 
 Need:
-1.线程、多线程、多进程、携程、消息队列、守护线程、阻塞、主线程；
-
+1.线程、多线程、多进程、携程、线程池、消息队列、守护线程、阻塞、主线程；
+2.改良链家、机场爬虫速度；
+3.爬虫启动成功或失败通知到邮箱或者其他地址上；
 
 Get:
 1.jsonpath模块
-2.post请求+保存seesion：
+
+  from jsonpath import jsonpath
+  data = {}  # type(data) = dict
+  print(jsonpath(data,"$..author"))
+  
+2.post请求+保存seesion
+
   data = {"key1":"value1"}
   s = requests.session  
   s.post(url,data=data,headers=headers)
+
+3.请求失败重试+assert断言错误
+
+  from retrying import retry
+  
+  @retry(stop_max_attempt_number=3)
+  def parse_url(url):
+    resp = requests.get(url,headers=header,timeout=2)
+    assert resp.status_code == 200
+    return resp
+  
+  def paser(url):
+    try:
+      resp = parse_url(url)
+      execept Exception as e:
+        print(e)
+        resp = None
+    return resp
+    
+  if __name__ == "__main__":
+    url = ""
+    resp = paser(url)
+    print(resp)
+  
+  stop_max_attempt_number：最大重试次数，超过该次数就停止；
+  stop_max_delay: 单位毫秒，被装饰的函数开始执行的时间点开始，到函数成功运行结束或者失败报错中止的时间点，只要这段时间超过10秒，函数就不会再执行了；
+  wait_fixed: 设置两次重试的时间间隔；
+  wait_random_min和wait_random_max: 用随机的方式设置两次重试之间的间隔；
+  
