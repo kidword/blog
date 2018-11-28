@@ -1,0 +1,12 @@
+[2018-11-28]
+
+Need:
+1.线程、多线程、多进程、携程、消息队列、守护线程、阻塞、主线程；
+
+
+Get:
+1.jsonpath模块
+2.post请求+保存seesion：
+  data = {"key1":"value1"}
+  s = requests.session  
+  s.post(url,data=data,headers=headers)
