@@ -54,4 +54,12 @@ class tencent_Spider(scrapy.Spider):
             meta_dict['time'] = tr.xpath('./td[5]/text()').extract_first()
             meta_dict['href'] = tr.xpath('.//a[1]/@href').extract_first()
             detail_url = 'https://hr.tencent.com/' + meta_dict['href']
- 6.
+ 
+ 6.循环解析每一页的字段
+    yield scrapy.Request(detail_url, callback=self.parse_detail, meta=meta_dict)
+
+ 7.获取下一页字段
+    next_url = 'https://hr.tencent.com/' + response.xpath('//a[text()="下一页"]/@href').extract_first()
+    if response.xpath('//a[text()="下一页"]/@href').extract_first() != 'javascript:;':
+        yield scrapy.Request(next_url, callback=self.parse_detail, meta={"item": next_url})
+ 8.
