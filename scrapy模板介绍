@@ -58,8 +58,24 @@ class tencent_Spider(scrapy.Spider):
  6.循环解析每一页的字段
     yield scrapy.Request(detail_url, callback=self.parse_detail, meta=meta_dict)
 
- 7.获取下一页字段
+ 7.获取下一页抓取字段
     next_url = 'https://hr.tencent.com/' + response.xpath('//a[text()="下一页"]/@href').extract_first()
     if response.xpath('//a[text()="下一页"]/@href').extract_first() != 'javascript:;':
         yield scrapy.Request(next_url, callback=self.parse_detail, meta={"item": next_url})
- 8.
+ 
+ 8.传值和接受传值
+    def A():
+        meat = {}
+        yield scrapy.Request(detail_url, callback=self.parse_detail, meta=meta_dict)
+    def B():
+        meta_dict = response.meta
+ 
+ 9.定位item需要下载的字段名称
+    class tencent_SpiderItem():
+            name = scrapy.Fider()
+ 
+ 10.from 项目名.item import tencent_SpiderItem
+        data = tencent_SpiderItem()
+        data['name']=meta_dict['name']
+        print(data)
+    
