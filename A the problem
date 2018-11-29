@@ -84,3 +84,10 @@ GET:
     2.选择属性进入新窗口；
     3.现在自动获取IP，自动获取DNS解析；
     4.确定完成；
+
+4.spider设置
+    1.类继承 class A（scrapy.Spider）
+    2.name="A":爬虫启动名称；allowed_domains=['baidu.com']:爬取的url范围设置；start_url=['http://www.baidu.com']：开始爬取url
+    3.必须有 def parse(self,response)函数，其中参数是固定的；
+    4.extract_first()返回一个列表，无值的话返回null
+    5.获取到页面链接以后用
