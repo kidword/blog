@@ -1,0 +1,57 @@
+import scrapy
+from tencent.items import TencentItem
+
+
+class tencent_Spider(scrapy.Spider):
+    name = "tencent_begin"
+    allowed_domains = ['tencent.com']
+    start_urls = ['http://hr.tencent.com/position.php']
+
+    def parse(self, response):
+        tr_list = response.xpath('//*[@class="tablelist"]//tr')[1:-1]
+        for tr in tr_list:
+            meta_dict = {}
+            meta_dict['name'] = tr.xpath('.//a[1]/text()').extract_first()
+            meta_dict['address'] = tr.xpath('./td[4]/text()').extract_first()
+            meta_dict['time'] = tr.xpath('./td[5]/text()').extract_first()
+            meta_dict['href'] = tr.xpath('.//a[1]/@href').extract_first()
+            detail_url = 'https://hr.tencent.com/' + meta_dict['href']
+            yield scrapy.Request(detail_url, callback=self.parse_detail, meta=meta_dict)
+            next_url = 'https://hr.tencent.com/' + response.xpath('//a[text()="下一页"]/@href').extract_first()
+            if response.xpath('//a[text()="下一页"]/@href').extract_first() != 'javascript:;':
+                yield scrapy.Request(next_url, callback=self.parse_detail, meta={"item": next_url})
+
+    def parse_detail(self, response):
+        meta_dict = response.meta
+        item = TencentItem()
+        item['name'] = meta_dict["name"]
+        item['address'] = meta_dict['address']
+        item['time'] = meta_dict['time']
+        item['job_content'] = response.xpath('//ul[@class="squareli"]/li/text()').extract()
+        print(item)
+
+
+
+
+
+1.类继承 class A（scrapy.Spider）
+
+2.name="tencent_begin":爬虫启动名称；
+  allowed_domains=['baidu.com']:爬取的url范围设置；
+  start_url=['http://www.baidu.com']：开始爬取url
+  
+3.必须有 def parse(self,response)函数，其中参数是固定的；
+
+4.extract_first()返回一个列表，无值的话返回null
+
+5.第一次解析页面
+  def parse(self, response):
+        tr_list = response.xpath('//*[@class="tablelist"]//tr')[1:-1]
+        for tr in tr_list:
+            meta_dict = {}
+            meta_dict['name'] = tr.xpath('.//a[1]/text()').extract_first()
+            meta_dict['address'] = tr.xpath('./td[4]/text()').extract_first()
+            meta_dict['time'] = tr.xpath('./td[5]/text()').extract_first()
+            meta_dict['href'] = tr.xpath('.//a[1]/@href').extract_first()
+            detail_url = 'https://hr.tencent.com/' + meta_dict['href']
+ 6.
