@@ -1,4 +1,4 @@
-1.在使用使用scrapy框架将数据导入MySQL数据库有如下操作
+1.将数据导入MySQL数据库操作
     （1）在spiders下面写好的 spdier.py以后，创建一个 Item对象如：
           from KgcSpider.ItemKgc import *
           item = KgcItem()
