@@ -1,0 +1,24 @@
+NEED:
+1.爬虫中间件和下载中间件的作用
+2.如何设置middlewares
+
+GET：
+1. 中间件作用
+  1.1.中间件可以对爬取过程中非状态码 status !== 200的request对象进行重试；
+  1.2.可以对cookie和headers进行更换和处理；
+
+2.中间件的使用
+    import random
+    from tencent.settings import USER_AGENTS_LIST # 注意导入路径,请忽视pycharm的错误提示
+
+    class UserAgentMiddleware(object):
+        def process_request(self, request, spider):
+            user_agent = random.choice(USER_AGENTS_LIST)
+            request.headers['User-Agent'] = user_agent
+
+
+    class CheckUA:
+        def process_response(self,request,response,spider):
+            print(request.headers['User-Agent'])
+            return response # 不能少！
+  
