@@ -17,9 +17,9 @@ class tencent_Spider(scrapy.Spider):
             meta_dict['href'] = tr.xpath('.//a[1]/@href').extract_first()
             detail_url = 'https://hr.tencent.com/' + meta_dict['href']
             yield scrapy.Request(detail_url, callback=self.parse_detail, meta=meta_dict)
-            next_url = 'https://hr.tencent.com/' + response.xpath('//a[text()="下一页"]/@href').extract_first()
-            if response.xpath('//a[text()="下一页"]/@href').extract_first() != 'javascript:;':
-                yield scrapy.Request(next_url, callback=self.parse_detail, meta={"item": next_url})
+        next_url = 'https://hr.tencent.com/' + response.xpath('//a[text()="下一页"]/@href').extract_first()
+        if response.xpath('//a[text()="下一页"]/@href').extract_first() != 'javascript:;':
+            yield scrapy.Request(next_url, callback=self.parse)
 
     def parse_detail(self, response):
         meta_dict = response.meta
@@ -29,6 +29,7 @@ class tencent_Spider(scrapy.Spider):
         item['time'] = meta_dict['time']
         item['job_content'] = response.xpath('//ul[@class="squareli"]/li/text()').extract()
         print(item)
+
 
 
 
