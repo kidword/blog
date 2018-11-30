@@ -64,14 +64,15 @@ class tencent_Spider(scrapy.Spider):
         yield scrapy.Request(next_url, callback=self.parse_detail, meta={"item": next_url})
  
  8.传值和接受传值
+   meata：实现数据在不同的解析函数中的传递；
     def A():
         meat = {}
         yield scrapy.Request(detail_url, callback=self.parse_detail, meta=meta_dict)
     def B():
         meta_dict = response.meta
  
- 9.定位item需要下载的字段名称
-    class tencent_SpiderItem():
+ 9.定义item需要下载的字段名称
+    class tencent_SpiderItem(scrapy.Item):
             name = scrapy.Fider()
  
  10.from 项目名.item import tencent_SpiderItem
