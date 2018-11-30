@@ -62,7 +62,7 @@ class tencent_Spider(scrapy.Spider):
  7.获取下一页抓取字段
     next_url = 'https://hr.tencent.com/' + response.xpath('//a[text()="下一页"]/@href').extract_first()
     if response.xpath('//a[text()="下一页"]/@href').extract_first() != 'javascript:;':
-        yield scrapy.Request(next_url, callback=self.parse_detail, meta={"item": next_url})
+        yield scrapy.Request(next_url, callback=self.parse)
  
  8.传值和接受传值
    meata：实现数据在不同的解析函数中的传递；
