@@ -1,0 +1,44 @@
+NEED:
+1.crawlspider是什么
+2.如何实现crawlspider
+
+GET:
+1.crawlspider是编写一套规则，从解析的页面中找到我们后面需要的url,不用一个个在页面中解析url了；
+
+2.创建crawlspider爬虫
+    scrapy genspider -t crawl tencent hr.tencent.com
+
+3.案例代码
+    # -*- coding: utf-8 -*-
+    from scrapy.linkextractors import LinkExtractor
+    from scrapy.spiders import CrawlSpider, Rule
+
+    class TencentSpider(CrawlSpider):
+        name = 'tencent'
+        allowed_domains = ['hr.tencent.com']
+        start_urls = ['https://hr.tencent.com/position.php']
+
+        rules = (
+            # 列表页
+            Rule(LinkExtractor(allow=r'position\.php\?&start=\d+#a'), follow=True),
+            # 详情页
+            Rule(LinkExtractor(allow=r'position_detail\.php\?id=\d+&keywords=&tid=0&lid=0'), callback='parse_item'),
+        )
+
+        def parse_item(self, response):
+            i = {}
+            # 岗位职责数据
+            i['job_content'] = response.xpath('//ul[@class="squareli"]/li/text()').extract()
+            print(i)
+            return i
+            
+    1.Rule表示规则 
+        LinkExtractor：提取连接器，可以通过正则或者xpath进行url地址匹配；
+        callback：回调函数；
+        follow：True/False 连接提取器提取的url地址对应的的响应是否继续被rules的规则继续提取；
+    
+    2.LinkExtractor的常见参数
+        allow：满足括号中的re匹配的url,为空则全部提取；
+        deny:满足括号中re匹配不被提取优先级大于allow;
+        
+    
