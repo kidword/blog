@@ -1,0 +1,65 @@
+NEED:
+1.scrapy的使用
+2.scrapy的怎么配置
+3.scrapy中pipelines.py的设置
+
+GET：
+1.测试scrapy shell的使用
+    scrapy shell http://www.baidu.com
+    response.request.headers:返回请求头
+
+2.setting的配置以及含义
+    1.变量名一般都是大写
+    2.请求头：USER_AGENT=[]
+    3.设置并发请求数量，默认16个 NCURRENT_REQUESTS=16
+    4.下载延时，默认无延时 DOWNLOAD_DELAY=3
+    5.是否开启COOKIE:COOKIES_ENABLED认每次请求都是带前一次COOKIE；
+    6.爬虫请求头，加入USER_AGENT将不起作用 DEFAULT_REQUEST_HEADERS
+    7.下载中间件:DOWNLOADER_MIDDLEWARES 
+    8.爬虫中间件：SPIDER_MIDDLEWARES 
+    9.设置控制台打印的信息的级别：LOG_LEVEL = "WARNING" 
+    10.启动爬虫日志：LOG_FILE = "./test.log"
+
+3.scrapy之pipeline管道
+    import json
+    from pymongo import MongoClient
+
+    class ItcastFilePipeline(object):
+        def open_spider(self, spider):  # 在爬虫开启的时候仅执行一次
+            if spider.name == 'itcast':
+                self.f = open('json.txt', 'a', encoding='utf-8')
+
+        def close_spider(self, spider):  # 在爬虫关闭的时候仅执行一次
+            if spider.name == 'itcast':
+                self.f.close()
+
+        def process_item(self, item, spider):
+            if spider.name == 'itcast':
+                self.f.write(json.dumps(dict(item), ensure_ascii=False, indent=2) + ',\n')
+            return item  # 不return的情况下，另一个权重较低的pipeline将不会获得item
+
+    class ItcastMongoPipeline(object):
+        def open_spider(self, spider):  # 在爬虫开启的时候仅执行一次
+            if spider.name == 'itcast':
+                con = MongoClient(host='127.0.0.1', port=27017) # 实例化mongoclient
+                self.collection = con.itcast.teachers # 创建数据库名为itcast,集合名为teachers的集合操作对象
+
+        def process_item(self, item, spider):
+            if spider.name == 'itcast':
+                self.collection.insert(dict(item)) # 此时item对象需要先转换为字典,再插入
+            # 不return的情况下，另一个权重较低的pipeline将不会获得item
+            return item
+  
+  在setting中配置pipeline中设置好管道
+        ITEM_PIPELINES = {
+                    'myspider.pipelines.ItcastFilePipeline': 400, # 400表示权重
+                    'myspider.pipelines.ItcastMongoPipeline': 500,
+                 }
+
+4.什么时候开启多个pipeline管道
+    比如：一个提取数据；一个数据清洗；
+
+5.pipeline使用需要注意的点
+    1.在setting的开启管道值的大小，觉得先后；
+    2.有多个pipeline的时候，每个pipeline中必须有proce_itme(self,item,spider)方法，而且最后用return item,不然后面的pipeline的数据为null;
+
