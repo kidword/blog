@@ -18,7 +18,32 @@ GET：
 
 
     class CheckUA:
+        def process_request(self,request,spider):
+            pass
+        
         def process_response(self,request,response,spider):
-            print(request.headers['User-Agent'])
-            return response # 不能少！
-  
+            if spider.name == "tencent"
+               print(request.headers["User-Agent"])
+               return response
+    
+    class ProxyMiddleware(self,request,spider):
+            def process_request(self,request,spider):
+                proxy = "http://1270.0.0.1:8080"
+                # proxy = random.choice(proxies) # proxies可以在settings.py中，也可以来源于代理ip的webapi
+                request.meta["proxy"] = proxy
+                return None
+    
+    process_request(self,request,spider):
+      每个request通过下载中间件时，方法被调用；
+      可以注释默认的下载中间件和爬虫中间件；
+    
+    process_response(self,request,response,spider):
+      放下载器完成http请求，传递相应给引擎的时候调用
+ 
+ 3.在setting中配置
+      ROBOTSTXT_OBEY = False
+      DOWNLOADER_MIDDLEWARES = {
+          'Tencent.middlewares.UserAgentMiddleware': 543,
+          'Tencent.middlewares.CheckUA': 600,
+          'Tencent.middlewares.ProxyMiddleware': 550,
+      }
