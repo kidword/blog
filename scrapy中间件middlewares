@@ -47,3 +47,14 @@ GET：
           'Tencent.middlewares.CheckUA': 600,
           'Tencent.middlewares.ProxyMiddleware': 550,
       }
+
+4.scrapy中有那些中间件
+  1.schduler midleware 
+    一般用不到；
+  2.spider midleware爬虫中间件
+    爬虫在运行的过程中进行处理；
+  3.download midleware下载中间件
+    请求到网页后，下载时做一些处理；
+  
+  
+    
