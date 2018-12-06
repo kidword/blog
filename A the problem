@@ -92,3 +92,9 @@ GET:
 [2018-12-05]
 GET：
 1.在scrapy中在setting中一定要写 ROBOTSTXT_OBEY = False 不然不能爬取
+
+
+[2018-12-06]
+1.删除重复数据，保留id较小的
+select * FROM world_copy WHERE Airports_name IN (SELECT Airports_name FROM world_copy GROUP BY Airports_name HAVING count(Airports_name) > 1) 
+AND ID NOT IN (SELECT min(ID) FROM world_copy GROUP BY Airports_name HAVING count(Airports_name) > 1)
