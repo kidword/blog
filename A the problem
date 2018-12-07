@@ -95,6 +95,12 @@ GET：
 
 
 [2018-12-06]
+GET:
 1.删除重复数据，保留id较小的
 select * FROM world_copy WHERE Airports_name IN (SELECT Airports_name FROM world_copy GROUP BY Airports_name HAVING count(Airports_name) > 1) 
 AND ID NOT IN (SELECT min(ID) FROM world_copy GROUP BY Airports_name HAVING count(Airports_name) > 1)
+
+[2018-12-07]
+NEED:
+1.scrapy对数据进行清洗；
+2.scrapy设置ip 代理；
