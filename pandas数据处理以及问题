@@ -1,9 +1,0 @@
-import pandas as pd
-
-1.df = pd.read.csv(r'D"\no.csv',encoding='gb18030')
-# 如果不写 encoding = 'gb18030'会出现如下错误：
-UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb9 in position 0: invalid start byte
-
-2. pd.read.csv("D:\机场数据.csv")
-# 如果写中文文件.csv会出现如下错误：
-OSError: Initializing from file failed
