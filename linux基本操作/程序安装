@@ -1,0 +1,8 @@
+1.安装yum；
+apt install yum
+
+2.安装mysql5.7压缩包
+wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.22-linux-glibc2.12-x86_64.tar.gz
+
+3.解压.tar.gz压缩文件
+tar -xvf 文件名称
