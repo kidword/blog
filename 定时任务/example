@@ -1,0 +1,9 @@
+window定时任务：
+    执行程序：'C:\Users\dell\AppData\Local\Programs\Python\Python36-32\python.exe'
+    可选参数：'执行.py文件名称'
+
+linux定时任务：
+    crontab -e:编辑定时
+    crontab -l: 查看当前的定时编辑
+    */5 * * * * /root/anaconda3/bin/python /python3/data/t5.py
+    
