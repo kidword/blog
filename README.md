@@ -9,3 +9,5 @@
 
 #### [3.爬虫需掌握](https://github.com/kidword/blog/blob/master/python%E7%88%AC%E8%99%AB%E9%9C%80%E8%A6%81%E6%8E%8C%E6%8F%A1%E7%9F%A5%E8%AF%86%E7%82%B9)  
 
+#### [4.制造数据](https://github.com/kidword/blog/tree/master/%E5%81%87%E6%95%B0%E6%8D%AE)  
+- 在数据库进行填充，指定开始和结束时间范围，每天早上8点到晚上10点，在数据库中进行数据随机插入，不同用户随机操作不同的接口；
