@@ -104,4 +104,3 @@ AND ID NOT IN (SELECT min(ID) FROM world_copy GROUP BY Airports_name HAVING coun
 NEED:
 1.scrapy对数据进行清洗；
 2.scrapy设置ip 代理；
-ces

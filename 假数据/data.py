@@ -3,8 +3,8 @@ import random
 import time
 
 server = 'localhost'
-user = "sa"
-password = '123456'
+user = "**"
+password = '***'
 
 content = [
     ['barrier/save', '添加路障','tb_Barrier'],
