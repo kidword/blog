@@ -6,4 +6,4 @@ linux定时任务：
     crontab -e:编辑定时
     crontab -l: 查看当前的定时编辑
     */5 * * * * /root/anaconda3/bin/python /python3/data/t5.py
-    
+
