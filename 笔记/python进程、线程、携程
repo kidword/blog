@@ -1,3 +1,6 @@
+参考：https://www.cnblogs.com/richardzgt/articles/7761172.html
+
+
 An executing instance of a program is called a process.
 Each process provides the resources needed to execute a program. A process has a virtual address space, executable code, open handles
 to system objects, a security context, a unique process identifier, environment variables, a priority class, minimum and maximum working
@@ -6,4 +9,3 @@ create additional threads from any of its threads.
 
 进程：程序的执行实例称为进程。
 进程组成：虚拟地址空间、可执行代码、系统对象打开的句柄数、安全上下文、唯一的进程标识符、环境变量、优先级、最大最小工作集组成等，通常由一个主线程启动。
-
