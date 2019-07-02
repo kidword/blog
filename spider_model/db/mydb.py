@@ -14,6 +14,7 @@ class MySQL:
         :param password:
         :param port:
         :param database:
+
         """
         try:
             self.db = pymysql.connect(host, username, password, database, charset='utf8', port=port)
