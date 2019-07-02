@@ -104,3 +104,12 @@ AND ID NOT IN (SELECT min(ID) FROM world_copy GROUP BY Airports_name HAVING coun
 NEED:
 1.scrapy对数据进行清洗；
 2.scrapy设置ip 代理；
+
+
+[2019-05-25]
+unicode 转换成中文
+html.encode().decode('unicode_escape')
+
+[2019-06-06]
+crontab定时执行任务
+https://www.jianshu.com/p/d93e2b177814
