@@ -1,5 +1,6 @@
 import time, sched
 import datetime
+import threading
 
 s = sched.scheduler(time.time, time.sleep)
 
@@ -22,7 +23,7 @@ def perform2(inc):
     event_fun2()
 
 
-def mymain(func, inc=2):
+def run(func, inc=2):
     if func == "1":
         s.enter(0, 0, perform1, (10,))  # 每隔10秒执行一次perform1
     if func == "2":
@@ -30,6 +31,7 @@ def mymain(func, inc=2):
 
 
 if __name__ == '__main__':
-    mymain('1')
-    mymain('2')
-    s.run()
+    run('1')
+    run('2')
+    t = threading.Thread(target=s.run)
+    t.start()
