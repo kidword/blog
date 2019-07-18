@@ -6,8 +6,6 @@ ALTER TABLE `test` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
 
 4.设置主键
 ALTER TABLE student ADD PRIMARY KEY(id);
-insert  into flight_info  (Take_off_airport_country,Take_off_airport_name,Take_off_airport_code,Take_off_airport_alt,Take_off_airport_lon,Landing_airport_country,Landing_airport_name,Landing_airport_code,Landing_airport_city,Landing_lat,Landing_lon) SELECT Take_off_airport_country,Take_off_airport_name,Take_off_airport_code,Take_off_airport_alt,Take_off_airport_lon,Landing_airport_country,Landing_airport_name,Landing_airport_code,Landing_airport_city,Landing_lat,Landing_lon FROM flight_xin;
-
 
 SELECT count(*),Take_off_airport_code,Landing_airport_code from flight_info_copy
 GROUP BY Take_off_airport_code,Landing_airport_code having count(*) > 1;
@@ -19,8 +17,6 @@ AND
 id NOT in (SELECT id from (SELECT id FROM flight_info_copy GROUP BY Take_off_airport_code,Landing_airport_code HAVING COUNT(*)>1)); 
 
 
-select count(*) from flight_info_copy;
-
-
+5.删除重复数据
 DELETE FROM fangyuan WHERE ID IN ( 
  SELECT ID FROM ( SELECT MAX(ID) AS ID,NAME FROM fangyuan GROUP BY NAME HAVING COUNT(ID)>1 ) AS ss);
