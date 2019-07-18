@@ -1,0 +1,8 @@
+使用scrapy发送post请求的两种方式
+
+方式一：通过FormRequest	发送
+    yield FormRequest(url, formdata={"name": "Tom"})
+
+方式二：通过Request发送
+    yield Request(url, method="POST", body=json.dumps({"name": "Tom"}))
+
