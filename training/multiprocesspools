@@ -1,0 +1,55 @@
+import os
+import multiprocessing
+import time
+
+
+def copy_file(q, file_name, old_folder_name, new_file_name):
+    # print('复制文件名:', file_name, '要复制的文件：', old_folder_name, '新复制的文件：', new_file_name)
+    old_file = open(old_folder_name + '/' + file_name, 'rb')
+    content = old_file.read()
+    old_file.close()
+
+    new_file = open(new_file_name + '/' + file_name, 'wb')
+    new_file.write(content)
+    new_file.close()
+    # 拷贝完了文件， 那么就向队列中写入一个消息，表示已经完成
+    q.put(file_name)
+
+
+def main():
+    old_folder_name = input('请输入要copy的文件：')
+    # 创建复制文件
+    new_file_name = old_folder_name + '_copy'
+    try:
+        os.mkdir(new_file_name)
+    except Exception as e:
+        print('文件已经存在，不需创建:', e)
+    # 获取文件夹下所有文件
+    file_names = os.listdir(old_folder_name)
+    # 创建进程池
+    pool = multiprocessing.Pool(5)
+
+    # 创建一个队列
+    q = multiprocessing.Manager().Queue()
+    # 向进程池中添加copy任务
+    for file_name in file_names:
+        pool.apply_async(copy_file, args=(q, file_name, old_folder_name, new_file_name))
+    pool.close()
+    # pool.join()  # 阻塞主进程
+    all_file_num = len(file_names) - 1
+    # print('all_file_num', file_names)
+    copy_ok = 0
+    while True:
+        file_name = q.get()
+        # print('已经完成copy', file_name)
+        copy_ok += 1
+        print('\r拷贝进度copy: %.2f %%' % (copy_ok*100/all_file_num), end='')
+        if copy_ok >= all_file_num:
+            break
+
+
+if __name__ == '__main__':
+    s_time = time.time()
+    main()
+    e_time = time.time()
+    print('运行时间为：', int(e_time - s_time))
