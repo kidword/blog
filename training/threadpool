@@ -1,0 +1,34 @@
+from concurrent.futures import ThreadPoolExecutor
+import requests
+import time
+
+start_url = ['https://www.qiushibaike.com/8hr/page/2/',
+             'https://www.qiushibaike.com/8hr/page/3/',
+
+             ]
+
+
+def parse_url(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        time.sleep(1)
+        print(response.text)
+        return response.text
+    else:
+        return
+
+
+def main():
+    pool = ThreadPoolExecutor(max_workers=4)
+    # future1 = pool.submit(action, 50)
+    for i in start_url:
+        future1 = pool.submit(parse_url, i)
+        future1.done()
+        # pool.apply_async(parse_url, args=(i,))
+    pool.shutdown()
+    # pool.close()
+    # pool.join()
+
+
+if __name__ == '__main__':
+    main()
