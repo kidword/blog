@@ -1,0 +1,73 @@
+# -*- coding: utf-8 -*-
+import requests
+import json
+import pandas as pd
+from tentposition.settings import *
+from multiprocessing.pool import ThreadPool
+import time
+import datetime
+import os
+
+file_path = r'E:\xbc\python_project\data\aaa.csv'
+file_path2 = ''
+
+
+def parse_url(url, pos_data):
+    response = requests.post(url, headers=headers, data=pos_data)
+    print(response.status_code)
+    if response.status_code == 200:
+        return response.text
+    else:
+        return
+
+
+def save_data(d):
+    global file_path, file_path2
+    res = parse_url(start_url, d)
+    dict_data = json.loads(res)
+    get_time = dict_data["time"]
+    locs = dict_data["locs"]
+    locss = locs.split(",")
+    temp = []
+    for i in range(int(len(locss) / 3)):
+        lat = locss[0 + 3 * i]  # 得到纬度
+        lon = locss[1 + 3 * i]  # 得到经度
+        count = locss[2 + 3 * i]
+        if left_bottom_lat < int(lat) < left_top_lat and right_bottom_lon < int(lon) < right_top_lon:
+            temp.append([get_time, int(lat) / 100, int(lon) / 100, count])
+    result = pd.DataFrame(temp)
+    result.dropna()
+    result.columns = ['time', 'lat', 'lon', 'count']
+
+    if file_path2:
+
+        result.to_csv(file_path2, mode='a', index=False)
+
+    else:
+        result.to_csv(file_path, mode='a', index=False)
+
+
+def main():
+    # 1.制造四个api接口{"count":4,"rank":0}，rank为 0 1 2 3
+    # 2.给getXingyunPoints接口提交json格式的数据，发送post请求，获取数据
+    # 3.数据存储为csv/数据库存储
+    post_data = [json.dumps({"count": 4, "rank": i}) for i in range(4)]
+    for i in post_data:
+        save_data(i)
+    # pool = ThreadPool(4)
+    # pool.apply_async(save_data, post_data)
+    # pool.close()
+    # pool.join()
+
+
+if __name__ == '__main__':
+    while True:
+        if os.path.getsize(file_path) // 1024 < 500:
+            main()
+            time.sleep(4)
+        else:
+            file_path2 = paths + 'DataBeijing{0}.csv'.format(datetime.datetime.now().strftime('%Y%m%d%H%M00'))
+            dsx = open(file_path2, 'a')
+            dsx.close()
+            main()
+            time.sleep(4)
