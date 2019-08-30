@@ -9,7 +9,6 @@ import datetime
 import os
 
 file_path = r'E:\xbc\python_project\data\aaa.csv'
-file_path2 = ''
 
 
 def parse_url(url, pos_data):
@@ -22,7 +21,7 @@ def parse_url(url, pos_data):
 
 
 def save_data(d):
-    global file_path, file_path2
+    global file_path
     res = parse_url(start_url, d)
     dict_data = json.loads(res)
     get_time = dict_data["time"]
@@ -38,13 +37,7 @@ def save_data(d):
     result = pd.DataFrame(temp)
     result.dropna()
     result.columns = ['time', 'lat', 'lon', 'count']
-
-    if file_path2:
-
-        result.to_csv(file_path2, mode='a', index=False)
-
-    else:
-        result.to_csv(file_path, mode='a', index=False)
+    result.to_csv(file_path, mode='a', index=False)
 
 
 def main():
@@ -66,8 +59,7 @@ if __name__ == '__main__':
             main()
             time.sleep(4)
         else:
-            file_path2 = paths + 'DataBeijing{0}.csv'.format(datetime.datetime.now().strftime('%Y%m%d%H%M00'))
-            dsx = open(file_path2, 'a')
+            file_path = paths + 'DataBeijing{0}.csv'.format(datetime.datetime.now().strftime('%Y%m%d%H%M00'))
+            dsx = open(file_path, 'a')
             dsx.close()
-            main()
             time.sleep(4)
