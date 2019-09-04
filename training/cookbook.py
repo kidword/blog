@@ -81,26 +81,47 @@ content_length = resp.headers['content-length']
 print(status)
 """
 import time
-from threading import Thread
 
 
-class CountdownTask:
-    def __init__(self):
-        self._running = True
+class Timer:
+    def __init__(self, func=time.perf_counter):
+        self.elapsed = 0.0
+        self._func = func
+        self._start = None
 
-    def terminate(self):
-        self._running = False
+    def start(self):
+        if self._start is not None:
+            raise RuntimeError('Already started')
+        self._start = self._func()
 
-    def run(self, n):
-        while self._running and n > 0:
-            print('T-minus', n)
-            n -= 1
-            time.sleep(5)
+    def stop(self):
+        if self._start is None:
+            raise RuntimeError('Not started')
+        end = self._func()
+        self.elapsed += end - self._start
+        self._start = None
 
-c = CountdownTask()
-t = Thread(target=c.run, args=(10,))
+    def reset(self):
+        self.elapsed = 0.0
+
+    @property
+    def running(self):
+        return self._start is not None
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, *args):
+        self.stop()
+
+
+def countdown(n):
+    while n > 0:
+        n -= 1
+
+t = Timer()
 t.start()
-c.terminate()  # Signal termination
-t.join()
-
-
+countdown(1000000)
+t.stop()
+print(t.elapsed)
