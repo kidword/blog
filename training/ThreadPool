@@ -1,11 +1,10 @@
-from multiprocessing.pool import ThreadPool
+from concurrent.futures import ThreadPoolExecutor
 import requests
 import time
 
 start_url = ['https://www.qiushibaike.com/8hr/page/2/',
              'https://www.qiushibaike.com/8hr/page/3/',
-             'https://www.qiushibaike.com/8hr/page/4/',
-             'https://www.qiushibaike.com/8hr/page/5/',
+
              ]
 
 
@@ -20,10 +19,15 @@ def parse_url(url):
 
 
 def main():
-    pool = ThreadPool(4)
-    pool.map_async(parse_url, start_url)
-    pool.close()
-    pool.join()
+    pool = ThreadPoolExecutor(max_workers=4)
+    # future1 = pool.submit(action, 50)
+    for i in start_url:
+        future1 = pool.submit(parse_url, i)
+        future1.done()
+        # pool.apply_async(parse_url, args=(i,))
+    pool.shutdown()
+    # pool.close()
+    # pool.join()
 
 
 if __name__ == '__main__':
