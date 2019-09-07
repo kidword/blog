@@ -20,3 +20,7 @@ id NOT in (SELECT id from (SELECT id FROM flight_info_copy GROUP BY Take_off_air
 5.删除重复数据
 DELETE FROM fangyuan WHERE ID IN ( 
  SELECT ID FROM ( SELECT MAX(ID) AS ID,NAME FROM fangyuan GROUP BY NAME HAVING COUNT(ID)>1 ) AS ss);
+ 
+ 
+ select distinct my.A,my.B,my.C from my inner join zbx on my.a=zbx.a 
+ where my.c=zbx.C 
