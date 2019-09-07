@@ -24,3 +24,9 @@ DELETE FROM fangyuan WHERE ID IN (
  
  select distinct my.A,my.B,my.C from my inner join zbx on my.a=zbx.a 
  where my.c=zbx.C 
+
+
+select DISTINCT m.a, m.b, m.c from my m 
+UNION
+select DISTINCT z.a, z.b, z.c from zbx z 
+where NOT EXISTS (SELECT 1 FROM MY WHERE A=Z.A AND B=Z.B AND C=Z.C)
