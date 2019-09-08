@@ -35,3 +35,6 @@ where NOT EXISTS (SELECT 1 FROM MY WHERE A=Z.A AND B=Z.B AND C=Z.C)
 select a,b,c,concat(a,b) D from
 (select my.A,my.B,my.C  from my inner join zbx on my.a=zbx.a 
  where my.c=zbx.C group by my.A,my.B,my.C ) aa
+
+select concat(a,b) a , c b, concat(a1,c1) c from
+(SELECT A.A,A.B,A.C,b.a a1,b.b c1 FROM My a inner join zbx b on a.a= b.a and a.c=b.c group by a.a, a.b, a.c , b.a,b.b) aa 
