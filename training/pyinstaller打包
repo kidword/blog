@@ -1,0 +1,2 @@
+1.打包 pyinstall -F run.py  打包带窗口
+2.打包 pyinstall -F -w run.py 打包不带窗口，进程后台运行着
