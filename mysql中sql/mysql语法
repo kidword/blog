@@ -1,0 +1,228 @@
+primary key
+not null
+unique
+default
+foreign key
+
+数据类型
+数值类型
+    tinyint
+    smallint
+    mediumint
+    int/integer
+    bigint
+字符串类型
+    char
+    varchar
+时间类型
+    date
+    time
+    datetime
+    year
+    timestamp
+
+desc 表名
+show tables;
+auto_increment
+
+
+example:
+    alter table 表名 add 列名 类型；
+    alter table student add birthday datetime;
+
+    alter table 表名 change 字段名 新字段名  datetime not null;
+    alter table student change birthday birth datetime not null;
+
+    alter table 表名 modify 列名 类型及约束
+    alter table student modify birth date not null;
+
+    alter table 表名 drop 列名；
+    alter table student drop birthday;
+
+数据操作：
+    select 列名1,列名2 from 表名;
+    select id,name from students;
+
+    增加：
+    insert into table values()
+    insert into table 表名(列名1，列名2) values (值1,值2)；
+
+    多行插入：
+    insert into 表名 values (...),(...);
+    insert into students values(值1),(值2)；
+    insert into students(name，age) values(name1,age1),(name2,age2)
+
+    修改：
+    update 表名 set 列1=值1,列2=值2 where 条件；
+    update students set name='123' where id=1;
+
+    删除：
+    delete from 表名 where 条件；
+    delete from students where id=3;
+
+mysql基本查询：
+    create database python_test charset='utf8';
+    use python_test
+
+    as给字段起别名
+    select id as 序号，name as 名字，gender as 性别 from students;
+    select distinct 列1，... from 表名；
+    select distinct gender from students;
+
+    消除重复行
+    select distinct gender from students;
+
+mysql条件查询
+    where支持多种运算符
+    比较运算符: = > >= < <= != <>
+    逻辑运算符: and or not
+    模糊查询: like
+        select * from students where name like '黄%';
+        '黄%'  '黄_'
+    范围查询:
+        in(表示在一个非连续的范围内)
+            select * from students where id in (1,3,8)
+        between and 表示在一个连续的范围内
+            select * from students where (id between 3 and 8 ) and gender=1;
+    空判断:
+        is null 判断是否为空
+            select * from students where height is null;
+        is not null
+            select * from students where height is not null;
+
+    优先级：
+        从高到底: 小括号，比较运算符，逻辑运算符
+        not>and>or
+
+mysql排序：
+    ase: 从小到大 升序
+    desc 从大到小 降序
+    select * from students where is_delete=0 order by name;
+    查询年龄在18到34岁之间的女性，身高从高到矮排序, 如果身高相同的情况下按照年龄从小到大排序
+    select * from students where (age between 18 and 34) and gender="女" order height desc,age asc;
+
+mysql聚合函数:
+    count(*)总数
+    max(列) 此列的最大值
+    min(列) 此列的最小值
+    sum(列) 此列的和
+    select sum(age) from students where gender="1"
+    avg(列) 平均值
+        select avg(id) from students where is_delete=0 and gender='2'
+
+mysql分组查询
+    group by
+        将查询的结果按照1个或者多个字段进行分组，字段值相同的为一组；
+    group_count(列)
+        select gender,group_count(name) from students group by gender;
+    group by + 聚合函数
+        select gender,avg(age) from students group by gender;
+    group by + having
+        having 条件表达式: 1.分组查询完了，在指定一些条件对分组后的结果进行过滤;
+                           2.having只能用于group by，与where相似，having可以使用聚合；
+        select gender,avg(age) from students group by gender having gender='男';
+
+    group by + with rollup
+        with rollup 在最后一行新增，来记录当前列里所有记录的总和；
+        select gender,count(*) from students order by gender with rollup;
+
+mysql分页查询
+    select * from 表名 limit start,count
+    start 位置开始，获取count条数据
+    select * from students gender=1 limit 3
+    limit 必须放到查询的最后面
+
+
+mysql连接查询
+    内连接查询：
+            查询到的结果为两个表匹配到的数据
+    左连接查询：
+            查询的结果为左表持有的数据
+    右连接查询：
+            查询结果为两个表匹配到的数据，右表持有数据，对于左表中不存在的数据使用null填充
+
+    select * from students as s left join classes as c on s.cls_id = c.id;
+    查询学生姓名及班级名称
+    select s.name,c.name from students as s right join classes as c on s.cls_id=c.id;
+
+mysql子查询
+    在select查询中嵌套select，嵌套的select称为子查询
+    子查询辅助主查询，要么充当条件，要么充当数据源
+
+    标量子查询：子查询返回的结果是一个值（一行一列）
+            select * from students where age > (select avg(age) from students);
+
+    列子查询：
+            select name from students where cls_id in (select id from classes);
+
+    行级子查询：
+        select * from students where (height,age) = (select max(height),max(age) from students);
+
+    表子查询
+        select name from (select gender,name from students) as s where gender=1;
+
+mysql视图
+    视图：一条select语句执行后返回的结果集；
+    创建视图
+        create view 视图名称 as select查询语句
+    使用视图
+        select * from 视图名称
+    删除视图
+        drop view 视图名称
+
+mysql事务
+    * mysql引擎必须是innodb才能使用事务，默认是innodb
+    事务：操作序列，要么都执行，要么都不执行，是一个不可分割的单位；
+    四大特性：原子性、一致性、隔离性、持久性；
+    事务命令
+        开始
+            begin;
+            或者
+            start transaction;
+        提交
+            commit
+        回滚
+            rollback
+mysql索引
+    索引：是对数据表里所有记录的引用指针，相当于一本书的目录，加快数据库的查询速度；
+    目的：提高数据查询速率；
+    create index 索引名称 on 表名（字段名称(长度)）
+    create index title_index on test_index (title(10));
+    索引注意问题：
+        解决数据量较大时，这些数据不需要经常修改，用索引加快查询速度;
+        建立太多索引会影像更新和插入数据的速度，因为他需要更新同一个索引文件；
+        建立索引会占用磁盘空间；
+        对于经常需要更新的表，就没有必要为一个很少使用where字句单独建立独立索引了；
+
+mysql主从分布
+    主从同步：
+              将数据从一个数据库服务器复制到其他服务器上 （作用）
+              复制数据时，一个充当主服务器（master），其余当从服务器（salve）(定义)
+              复制是异步进行的，所以不需要一直连接主服务器，通过配置可以指定复制的数据库、数据库上的某个表；（特点）
+    主从同步好处：
+              通过增加服务器来提高数据库性能，在主服务器上执行写入和更新（主服务器）,在从服务器上提供读功能（从服务器）;
+              动态的调整数据库数量，从而调整整个数据库性能；
+              数据安全性，数据已复制到从服务器，从服务器可以终止进程，所以，可以在从服务器上备份，不用在主服务上备份，破坏主服务器相应数据；
+              主服务器生成实时数据，从服务器分析这些数据，提高主服务器性能；
+
+    * 配置主从同步的步骤
+
+problem:
+    unsigned   tinyint   enum   decimal(5,2)  modify
+    增加列/删除列/修改列类型及约束/修改列名
+    limit
+    视图的作用
+    数据库备份
+
+    1.需要做什么
+    2.什么问题
+    3.最后效果
+    4.第一步准备什么 第二步开始执行... 哪些困难 ...
+    5.解决问题
+
+    1.为什么会出现（优势）
+    2.解决了哪些问题
+    3.对比其他同类型
+    4.如何基本使用(基本定义)
+    5.优化提升
+    6.不同运行环境和运行压力
