@@ -1,0 +1,102 @@
+参考链接：
+https://www.cnblogs.com/zzhzhao/p/5269217.html
+https://www.cnblogs.com/stream886/p/6021743.html
+
+1.数据读取
+
+loandata = pd.DataFrame(pd.read_excel('loandata.xlsx'))  读取excel
+data_url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/tips.csv"  网络读取
+df = pd.read_csv(data_url) 读取csv文件
+mysql_cn = pymysql.connect(host='localhost', port=3306,user='root', passwd='hh226752', db='flightradar24', charset='utf8')
+df = pd.read_sql('select * from test;', con=mysql_cn)   读取数据库数据
+-----------------------------------------------------------------------------------------
+
+2.重复值处理
+
+loandata.duplicated() 从前往后列数据一样，判断为重复true
+loandata.drop_duplicates() 删除重复的列
+-----------------------------------------------------------------------------------------
+
+3.空值处理
+
+loandata.isnull()  如果是空值 显示True
+loandata.notnull() 如果是空值，返回False
+loandata.isnull().value_counts() 返回空值的次数
+
+loandata.fillna(0) 对空值进行以0填充
+loandata.dropna()l 对空值删除
+-----------------------------------------------------------------------------------------
+
+4.数据中异常值和极端值处理
+
+df.describe().astype(np.int64).T
+# 异常值处理
+df.replace([100000,36],df['loan_amnt'].mean())
+------------------------------------------------------------------------------------------
+
+5.数据格式转换
+
+df['loan_amnt']=df['loan_amnt'].astype(np.int64)  将lon_amnt的列改为int64整数型，float64浮点型
+df['issue_d']=pd.to_datetime(df['issue_d'])  将isiue_d改为日期型
+------------------------------------------------------------------------------------------
+
+6.数据分组
+
+# 以bins设置的间距分组，分组为A B C D四组，df['categories']为分组后的表名，open_acc为分组的字段
+bins = [0, 5, 10, 15, 20]
+group_names = ['A', 'B', 'C', 'D']
+df['categories'] = pd.cut(df['open_acc'], bins, labels=group_names)
+------------------------------------------------------------------------------------------
+
+7.pandas中的函数
+
+df.head()   查看头部
+df.tail()   查看最末几行
+df.describe()  计算表中数据列的信息
+df[(df["price"]>200)].count()  查看价格大于200出现的次数
+df.shape  查看表数据行和列
+df.isnull()  查看空值
+df.fillna(value = 0)  查看空值用0填充
+df["name"].value_counts()  将name列出现的次数从大到下排列
+df.mean(axis=0)  逐列的平均值
+df.mean(axis=1)  逐行的平均值
+df.columns  查看列名
+------------------------------------------------------------------------------------------
+
+8.group by函数
+
+grouped = df['data1'].groupby(df['key1'])
+grouped.mean()  根据data1列的数据排列
+------------------------------------------------------------------------------------------
+
+9.按列值排序
+
+df.sort_values(by=["Price"])   按照价格排序，默认从小到大排列
+df.sort_values(by=["Price"],ascending=False)  ascending的值控制排序
+df["qu"].value_counts()   根据区出现次数的多少，进行排序
+------------------------------------------------------------------------------------------
+
+10.查看行列数据
+
+df.ix[10:20]  查看10到20行数据
+df.ix[10:20,0:3]  查看10到20行数据并且列数是0到3列数据
+df.iloc[[1,3,5]]  查看 1,3,5行数据
+df.iloc[[1,3,5],[2,4]]  查看1,3,5行数据，列数是2,4数据
+df.iat[3,2]  专门提取第三行，第二列数据
+------------------------------------------------------------------------------------------
+
+11.修改列名
+
+df.columns = ["a","b","c"]
+df.rename(columns={'A':'a', 'C':'c'}, inplace = True) # inplace的意思是在原DataFrame上完成
+------------------------------------------------------------------------------------------
+
+12.连接表
+
+data = pd.merge(df1, df2, on=['Take_country', 'Take_airport'], how='left')
+data = data[['读者证号', '读者姓名', '读者性别', '书名', '中图法分类号', '读者单位', '读者类别']]  # 修改表名
+------------------------------------------------------------------------------------------
+
+13.根据列名查询行
+
+c1 = df1.loc[df1['Landing_airport_country'] == "THAILAND"]
