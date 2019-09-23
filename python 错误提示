@@ -1,1 +1,4 @@
 1.struct.error: unpack requires a bytes object of length 2
+2.UnicodeDecodeError: 'utf-8' codec can't decode byte 0xba in position 0: invalid start byte
+  table_name = pd.read_csv(path, encoding='gbk')
+  解决：encoding='gbk'
