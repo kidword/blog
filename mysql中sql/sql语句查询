@@ -38,3 +38,14 @@ select a,b,c,concat(a,b) D from
 
 select concat(a,b) a , c b, concat(a1,c1) c from
 (SELECT A.A,A.B,A.C,b.a a1,b.b c1 FROM My a inner join zbx b on a.a= b.a and a.c=b.c group by a.a, a.b, a.c , b.a,b.b) aa 
+
+
+DELETE from Person 
+Where Id not in (
+    Select Id 
+    From(
+    Select MIN(Id) as id
+    From Person 
+    Group by Email
+   ) t
+)
