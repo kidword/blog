@@ -1,0 +1,32 @@
+from selenium import webdriver
+
+
+"""
+chrome 设置代理
+"""
+proxy = '127.0.0.1:8563'
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument('--proxy-server=http://' + proxy)
+browser = webdriver.Chrome(chrome_options=chrome_options)
+browser.get('http://httpbin.org/get')
+
+"""
+PhantomJs设置代理
+
+如果代理需要认证
+
+service_args = [
+    '--proxy=127.0.0.1:9743',
+    '--proxy-type=http',
+    '--proxy-auth=username:password'
+]
+"""
+
+service_args = [
+    '--proxy=127.0.0.1:9743',
+    '--proxy-type=http'
+]
+
+browser = webdriver.PhantomJS(service_args=service_args)
+browser.get('http://httpbin.org/get')
+print(browser.page_source)
