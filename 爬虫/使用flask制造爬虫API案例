@@ -1,0 +1,38 @@
+# coding:utf8
+'''flask配置'''
+import requests
+import flask
+from flask import request
+server = flask.Flask(__name__)
+
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+                         ' AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36'}
+
+
+@server.route('/', methods=['get', 'post'])
+def reg():
+    funItemMenuId = request.values.get('funItemMenuId')
+    position = request.values.get('position')
+    url = 'http://www.nmic.cn/dataGis/multiExhibition/getLegend?funItemMenuId={0}&position={1}'\
+        .format(funItemMenuId, position)
+    r = requests.get(url, headers=headers)
+    return r.text
+
+if __name__ == '__main__':
+    server.run(port=1688, debug=True, host='127.0.0.1')
+
+
+'''爬虫配置'''
+import requests
+
+headers = {
+    'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                  " (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36"
+}
+url = 'http://127.0.0.1:1688/'
+data = {
+    'funItemMenuId': 115990101,
+    'position': 'Gis'
+}
+response = requests.get(url=url, headers=headers, params=data)
+print(response.text)
