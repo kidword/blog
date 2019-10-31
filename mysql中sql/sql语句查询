@@ -49,3 +49,35 @@ Where Id not in (
     Group by Email
    ) t
 )
+
+1.去除航线表中的重复数据，如果 起点到终点，终点到起点的数据只算作一条数据
+   SELECT
+    *
+   FROM
+    ydyl_planlines_copy a
+   WHERE
+    EXISTS (
+     SELECT
+      1
+     FROM
+      ydyl_planlines_copy b
+     WHERE
+
+     b.start_code = a.end_code
+     AND b.end_code = a.start_code
+     AND a.ID > b.id
+    )
+   OR
+    NOT EXISTS (
+     SELECT
+      1
+     FROM
+      ydyl_planlines_copy b
+     WHERE
+
+     b.start_code = a.end_code
+     AND b.end_code = a.start_code
+    )
+
+    GROUP BY id,start_code,end_code
+    ORDER BY id
