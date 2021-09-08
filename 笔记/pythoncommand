@@ -1,2 +1,0 @@
-1. 生成项目中的requirements.txt
-  pip freeze > requirements.txt
