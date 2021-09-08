@@ -1,3 +1,0 @@
-1.需要启动多个定时任务的时候，可以采用sched模块进行任务调度
-（参考地址:https://github.com/kidword/blog/blob/master/%E7%88%AC%E8%99%AB/%E5%AE%9A%E6%97%B6%E8%B0%83%E5%BA%A6def.py）
-https://www.jianshu.com/p/b77d934cc252(定时任务)
