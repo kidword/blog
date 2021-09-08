@@ -1,6 +1,0 @@
-1.安装jdk-8u121-windows-x64.exe到指定目录 E:\Java\jdk1.8.0_121
-2.新建jre文件夹
-3.我的电脑配置环境变量:
-    3.1. JAVA_HOME  E:\Java\jdk1.8.0_121
-    3.2. 系统变量→寻找 Path 变量→编辑: %JAVA_HOME%\bin;
-
