@@ -1,7 +1,0 @@
-1. list_display:用来配置列表页面展示那些内容；
-2. list_display_links: 用来配置那些字段可以作为链接，点击他们进入编辑页面；
-3. list_filter: 配置页面过滤器，需要通过哪些字段来过滤列表页
-4. serch_fields: 配置搜索字段；
-5. actions_on_top: 动作相关的配置，是否展示在顶部；
-6. actions_on_bottom: 动作相关的配置，是否展示在底部；
-7. asve_on_top: 保存、编辑、编辑并新建按钮是否在顶部展示；
